@@ -1,0 +1,407 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://snicco.io/schemas/fortress.json",
+  "$comment": "For more information about the Snicco Fortress Security Plugin refer to [the documentation](https://github.com/fortress-docs).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "password",
+          "session",
+          "auth",
+          "rate_limit"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "default": [
+        "password",
+        "session",
+        "auth",
+        "rate_limit"
+      ],
+      "description": "Determines the actively used modules of Fortress."
+    },
+    "url_namespace": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\/(?!.*\\/\\/)([a-zA-Z\\-\\/]+)$",
+      "default": "/snicco-fortress",
+      "description": "The shared prefix of all routes that Fortress manages."
+    },
+    "cli_namespace": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_/-]{2,}$",
+      "default": "snicco/fortress",
+      "description": "The namespace used for WP-CLI commands. Must be valid according to the WP-CLI command name rules."
+    },
+    "challenges_table_name": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "default": "snicco_fortress_challenges",
+      "description": "The table name (without prefix) where Fortress stores auth challenges."
+    },
+    "privileged_user_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "administrator",
+        "editor"
+      ],
+      "description": "An array of WordPress user roles that Fortress considers to be privileged."
+    },
+    "theme_css_file": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\/(?!.*\\/\\/)([a-zA-Z\\-\\/]+)$",
+      "default": "/wp-content/plugins/snicco-fortress/default-theme.css",
+      "description": "A path to an existing CSS file that defines CSS variables to customize the frontend appearance of Fortress. Relative to the domain."
+    },
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sudo_mode_timeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 600,
+          "description": "The interval in seconds during which Fortress will consider a session to be in sudo mode after logging in."
+        },
+        "sudo_mode_timeout_per_cap": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z-_]+$": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "default": {},
+          "description": "An object that can be used to specify sudo mode timeouts for users with specific capabilities."
+        },
+        "idle_timeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1800,
+          "description": "The interval in seconds after which a user without activity is logged out."
+        },
+        "idle_timeout_per_cap": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z-_]+$": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "default": {},
+          "description": "An object that can be used to specify idle timeouts for users with specific capabilities."
+        },
+        "rotation_timeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1200,
+          "description": "The interval after which the user's session token is rotated."
+        },
+        "rotation_timeout_per_cap": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z-_]+$": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "default": {},
+          "description": "An object that can be used to specify rotation timeouts for users with specific capabilities."
+        },
+        "absolute_timeout": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 43200,
+          "description": "The maximum lifespan of a user session, applicable only to users that did not check the 'remember me' option during login."
+        },
+        "absolute_timeout_per_cap": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z-_]+$": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "default": {},
+          "description": "An object that can be used to specify absolute timeouts for users with specific capabilities, applicable only to users that did not check the 'remember me' option during login."
+        },
+        "absolute_timeout_remembered_user": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 86400,
+          "description": "The maximum lifespan of a user session, applicable only to users that checked the 'remember me' option during login."
+        },
+        "absolute_timeout_remembered_user_per_cap": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z-_]+$": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "default": {},
+          "description": "An object that can be used to specify absolute timeouts for users with specific capabilities, applicable only to users that checked the 'remember me' option during login."
+        },
+        "session_table_name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+          "default": "snicco_fortress_sessions",
+          "description": "The name without the prefix of the database table that stores user sessions."
+        },
+        "remember_cookie_name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9!#$%&'*+-.^_`|~]+$",
+          "default": "snicco_fortress_remember_me",
+          "description": "Determines the name of a marker cookie that Fortress uses to determine if a user wants to be remembered."
+        },
+        "protected_pages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\/(?!.*\\/\\/)([a-zA-Z\\-\\/]+)$"
+          },
+          "default": [
+            "/wp-admin/update-core.php",
+            "/wp-admin/themes.php",
+            "/wp-admin/theme-install.php",
+            "/wp-admin/plugins.php",
+            "/wp-admin/plugin-install.php",
+            "/wp-admin/users.php",
+            "/wp-admin/user-new.php",
+            "/wp-admin/profile.php",
+            "/wp-admin/update.php",
+            "/wp-admin/options-*",
+            "wp-admin/authorize-application.php",
+            "/wp-admin/tools.php",
+            "/wp-admin/import.php",
+            "/wp-admin/export.php",
+            "/wp-admin/site-health.php",
+            "/wp-admin/export-personal-data.php",
+            "/wp-admin/erase-personal-data.php",
+            "/wp-admin/theme-editor.php",
+            "/wp-admin/plugin-editor.php",
+            "/snicco-fortress/auth/totp/manage*"
+          ],
+          "description": "The protected_pages option specifies URL paths that a user can only access if his session is still in sudo mode. You can use a * character as a wildcard."
+        }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "totp_secrets_table_name": {
+          "type": "string",
+          "description": "The name of the database table that stores users' TOTP secrets.",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+          "default": "snicco_fortress_totp_secrets"
+        },
+        "totp_sha_algo": {
+          "type": "string",
+          "description": "The hash algorithm used to generate six-digit one-time passwords for TOTP.",
+          "enum": [
+            "sha1",
+            "sha256",
+            "sha512"
+          ],
+          "default": "sha1"
+        },
+        "skip_2fa_setup_duration_seconds": {
+          "type": "integer",
+          "description": "The interval in seconds a user can skip his mandatory 2FA setup once.",
+          "minimum": 1,
+          "default": 1800
+        },
+        "require_2fa_for_roles": {
+          "type": "array",
+          "description": "Roles that require 2FA immediately after login. This default to the value of 'privileged_user_roles'",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "administrator",
+            "editor"
+          ]
+        },
+        "require_2fa_for_roles_before_login": {
+          "type": "array",
+          "description": "Roles that require confirmed 2FA credentials before login.",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "max_totp_attempts_before_lockout": {
+          "type": "integer",
+          "description": "The maximum amount of failed 2FA attempts allowed before locking an account.",
+          "minimum": 1,
+          "default": 5
+        }
+      }
+    },
+    "password": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "password_policy_excluded_roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "An array of user roles that are excluded from complying with the password policy."
+        },
+        "disable_application_passwords": {
+          "type": "boolean",
+          "default": true,
+          "description": "Controls whether WordPress application passwords are entirely disabled."
+        },
+        "allow_legacy_hashes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Controls whether Fortress will try to validate password hashes created using the insecure default hashing algorithm of WordPress."
+        },
+        "default_hash_strength": {
+          "type": "string",
+          "default": "moderate",
+          "description": "Determines how long it takes the libsodium PHP extension to compute the hash of a password.",
+          "enum": [
+            "interactive",
+            "moderate",
+            "sensitive"
+          ]
+        },
+        "auto_upgrade_hashes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Controls whether Fortress will automatically rehash a user's password after he entered authenticated successfully."
+        },
+        "include_pluggable_functions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether Fortress should load its custom implementations of the 'wp_***' pluggable password functions."
+        },
+        "disable_web_password_reset_for_roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "administrator",
+            "editor"
+          ],
+          "description": "An array of WordPress user roles for which password resets in the admin and frontend UI are disabled. Defaults to the value of 'privileged_user_roles'"
+        }
+      }
+    },
+    "rate_limit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "storage": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "database"
+          ],
+          "description": "The storage option can be used to explicitly tell Fortress to use the database as a rate-limit storage."
+        },
+        "cache_group": {
+          "type": "string",
+          "default": "snicco_fortress_rate_limits",
+          "description": "The cache_group option will either be used as a WP Object cache group for storing rate limits or, if no object cache is available, as the database table name for storing rate limits."
+        },
+        "device_id_cookie_prefix": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9!#$%&'*+-.^_`|~]+$",
+          "default": "device_id",
+          "description": "All device ID cookies will start with the value of the device_id option."
+        },
+        "device_id_burst": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 5,
+          "description": "The number of failed login attempts a user can make with a valid device ID before the device ID throttling activates."
+        },
+        "device_id_refill_one_token_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 20,
+          "description": "The interval in seconds a user rate-limited by his device ID has to wait before he can make ONE more login request."
+        },
+        "username_burst": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 5,
+          "description": "The number of failed login attempts a user can make without device ID before the username throttling activates."
+        },
+        "username_refill_one_token_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 900,
+          "description": "The interval in seconds that a user rate-limited by his username has to wait before he can make ONE more login request for that same username."
+        },
+        "ip_burst": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 20,
+          "description": "The number of failed login attempts that one IP address can make before the IP throttling activates."
+        },
+        "ip_refill_one_token_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1800,
+          "description": "The interval in seconds that a rate-limited IP address has to wait before it can make ONE more login request."
+        },
+        "global_burst": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 100,
+          "description": "The number of failed logins that are considered 'normal' across the entire site. Exceeding this limit will activate the global login throttling."
+        },
+        "global_refill_one_token_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 30,
+          "description": "The interval in seconds after which ONE more login request is possible globally."
+        },
+        "log_to_syslog" : {
+          "type" : "boolean",
+          "default": true,
+          "description": "Whether failed login requests during active rate-limiting should be logged to the syslog"
+        },
+        "syslog_daemon": {
+          "type": "string",
+          "default": "snicco_fortress",
+          "description": "The syslog_deamon option will be prepended to all messages that Fortress logs to the syslog."
+        },
+        "syslog_flags": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "A bitmask, valid options can be found in the openlog manual. Defaults to LOG_PID"
+        },
+        "syslog_facility": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 32,
+          "description": "A bitmask, valid options can be found in the openlog manual. Defaults to LOG_AUTH"
+        }
+      }
+    }
+  }
+}
