@@ -7,6 +7,8 @@
     * [For a non-sudo mode session](#for-a-non-sudo-mode-session)
 * [Protected pages](#protected-pages)
 * [Testing the sudo mode](#testing-the-sudo-mode)
+* [Skipping the sudo mode check](#skipping-the-sudo-mode-checks)
+    * [Skipping the sudo more for application passwords](#skipping-the-sudo-mode-checks-for-application-passwords)
 <!-- TOC -->
 
 ## Introduction
@@ -123,6 +125,73 @@ wp snicco/fortress session toggle-sudo {username}
 ```
 
 Refer to the [complete command reference here](../../wp-cli/readme.md#toggle-sudo).
+
+## Skipping the sudo mode checks
+
+You might have plugins on your site that act on behalf of a WordPress user.
+This is typically only the case when you have any third-party application performing requests to your WordPress site.
+
+Common examples are management tools like MainWP/ManageWP.
+
+If you experience any issues it's likely because they try act on behalf of WordPress user even-though the user is not making actual request. 
+
+This means that Fortress can't find a session token to check the sudo mode.
+
+> The sudo mode is always checked per user session, not per user.
+
+As always, Fortress will error on the site of caution and abort the request as a missing 
+session token might very well indicate a misconfiguration of your site. 
+
+In any case you can skip the sudo checks at runtime with a WordPress filter like so:
+
+```php
+// Put this into a custom must-use plugin ideally.
+// A normal plugin or functions.php is also fine.
+
+use Snicco\Enterprise\Fortress\Session\Infrastructure\Event\ShouldSudoModeCheckBeSkipped;
+
+add_action(ShouldSudoModeCheckBeSkipped::class, function (ShouldSudoModeCheckBeSkipped $event) {
+     
+    // You need to confirm with manageWP how to determine this.
+    $is_this_a_ManageWP_request = false;
+    
+    if ($is_this_a_manage_wp_request){
+        $event->skip_for_current_request = true;
+    }
+    
+});
+```
+
+The action must be added before the `admin_init` hook for admin requests, or before the `wp_loaded` hook for other requests.
+
+### Skipping the sudo mode checks for application passwords
+
+If your site uses application passwords you might also need to skip sudo mode checks.
+
+To achieve this you can make use of the [application_password_did_authenticate](https://developer.wordpress.org/reference/hooks/application_password_did_authenticate/) hook that WordPress fires after a request was authenticated successfully with an application password.
+
+```php
+// Put this into a custom must-use plugin ideally.
+// A normal plugin or functions.php is also fine.
+
+use Snicco\Enterprise\Fortress\Session\Infrastructure\Event\ShouldSudoModeCheckBeSkipped;
+
+add_action('application_password_did_authenticate', function (WP_User $user) :void {
+
+    $user_id = $user->ID;
+        
+    add_action(ShouldSudoModeCheckBeSkipped::class, function (ShouldSudoModeCheckBeSkipped $event) use($user_id){
+         
+        if ($user_id === $event->user_id){
+            $event->skip_for_current_request = true;
+        }
+        
+    });
+        
+}, 10, 1);
+```
+
+You need to define this before the `init` hook fires.
 
 ---
 
