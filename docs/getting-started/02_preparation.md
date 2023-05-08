@@ -7,6 +7,7 @@
     * [Generating secrets before activation](#generating-secrets-before-activation)
       * [Example: dynamic Nginx configuration](#example-dynamic-nginx-configuration)
       * [Example: dynamic PHP configuration](#example-dynamic-php-configuration)
+    * [Disabling fallback secrets](#disabling-fallback-secrets)
     * [The most critical rule with secrets](#the-most-critical-rule-with-secrets)
   * [White-label](#white-label)
   * [Special directories](#special-directories)
@@ -18,11 +19,11 @@
 
 Before you activate Snicco Fortress for the first time, you have to decide how to supply the plugin's cryptographic secrets for its functionality.
 
-The supported options are: (from most ideal to least ideal):
+The supported options are: (from most ideal to least ideal in the context of WordPress):
 
-1. Storing a local path in the `$_SERVER` env and have the plugin read the file contents.
+1. Supplying the secret directly to the `$_SERVER` env (i.e. `fastcgi_param`)
+2. Storing a local path in the `$_SERVER` env and have the plugin read the file contents.
    <br>This works great with docker-based setups and docker secrets.
-2. Supplying the secret directly to the `$_SERVER` env (i.e. `fastcgi_param`)
 3. Using a PHP constant defined before Fortress loads (typically in the wp-config.php) file.
 
 ### Default: auto-generated secrets
@@ -39,7 +40,7 @@ This text is [usually included in the default configuration of WordPress](https:
 Fortress will recursively try to find the wp-config file, starting at `ABSPATH . 'wp.config.php'`.
 
 Storing the secrets in the wp-config.php file is superior to keeping them in the database.
-However, there is still the risk of the secrets ending up in backups.
+However, there is still the risk of the secrets ending up in backups or being leaked through a local file inclusion vulnerability.
 
 ### Generating secrets before activation
 
@@ -104,6 +105,28 @@ define("SNICCO_FORTRESS_DEVICE_ID_AUTHENTICATION_KEY_HEX","6ddc3d504871dbea36ab2
 define("SNICCO_FORTRESS_TOTP_ENCRYPTION_SECRET_HEX","e63845960aca90e39e93dc96d49151ec6941c1092ce61c0a5acb5309c758be59");
 define("SNICCO_FORTRESS_LIBSODIUM_GENERIC_HASH_KEY_HEX","ae6dd3785280ed0e0530bd992cc21ea95c288441ade62bc0b79fe2e4b12dc691");
 ```
+
+### Disabling fallback secrets
+
+If you are generating secrets before activating the plugin, you can instruct Fortress
+to NOT generate default secrets in the wp-config.php file. 
+
+Instead, an exception will be thrown for any missing secrets as it likely means
+that you environment is broken.
+
+You can instruct Fortress to NOT generate default secrets by setting the following environment
+variable BEFORE Fortress boots. 
+
+```php
+$_SERVER['SNICCO_FORTRESS_NO_FALLBACK_SECRETS'] = '1'
+```
+
+It does not matter whether you set `SNICCO_FORTRESS_NO_FALLBACK_SECRETS` in PHP or through a SAPI parameter by using fast_cgi_param, docker environments, or similar techniques.
+
+**Important:**
+
+Fortress completely ignores the value of `SNICCO_FORTRESS_NO_FALLBACK_SECRETS` and only checks for existence.
+The only restriction is that `SNICCO_FORTRESS_NO_FALLBACK_SECRETS` **MUST be a non-empty-string**.
 
 ### The most critical rule with secrets
 

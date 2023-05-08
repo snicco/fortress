@@ -1,3 +1,11 @@
+# [1.0.0-beta.13](https://github.com/snicco/enterprise/compare/1.0.0-beta.12...1.0.0-beta.13) (2023-05-08)
+
+
+### Features
+
+* allow disabling the generation of wp-config fallback secrets ([e17c4ce](https://github.com/snicco/enterprise/commit/e17c4ce5249ec15664f3dcd00d221320065d5e8a)), closes [#49](https://github.com/snicco/enterprise/issues/49)
+* improve robustness of table creation/management ([5590a43](https://github.com/snicco/enterprise/commit/5590a43709a3e7784b71a1c38425fc57c951fbb9)), closes [#51](https://github.com/snicco/enterprise/issues/51) [#52](https://github.com/snicco/enterprise/issues/52) [#54](https://github.com/snicco/enterprise/issues/54)
+
 # [1.0.0-beta.11](https://github.com/snicco/enterprise/compare/1.0.0-beta.10...1.0.0-beta.11) (2023-04-26)
 
 
