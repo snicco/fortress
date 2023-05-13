@@ -118,10 +118,10 @@ You can instruct Fortress to NOT generate default secrets by setting the followi
 variable BEFORE Fortress boots. 
 
 ```php
-$_SERVER['SNICCO_FORTRESS_NO_FALLBACK_SECRETS'] = '1'
+$_SERVER['SNICCO_FORTRESS_NO_FALLBACK_SECRETS'] = '1';
 ```
 
-It does not matter whether you set `SNICCO_FORTRESS_NO_FALLBACK_SECRETS` in PHP or through a SAPI parameter by using fast_cgi_param, docker environments, or similar techniques.
+It does not matter whether you set `SNICCO_FORTRESS_NO_FALLBACK_SECRETS` in PHP or through a SAPI parameter by using `fast_cgi_param`, docker environments, or similar techniques.
 
 **Important:**
 

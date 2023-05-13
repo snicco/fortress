@@ -14,7 +14,7 @@
     * [Testing configuration sources](#testing-your-configuration-sources)
   * [Viewing your current configuration](#viewing-your-currently-cached-configuration)
   * [Clearing the configuration cache](#clearing-the-configuration-cache)
-    * [Staging sites and site migration](#staging-sites-and-site-migration)
+    * [Self-invalidation](#self-invalidation)
 <!-- TOC -->
 
 ## Approach
@@ -302,25 +302,39 @@ Refer to the [full command reference](../wp-cli/readme.md#cache-config) for furt
 
 ## Clearing the configuration cache
 
-You must clear the configuration cache each time you change one of the [configuration sources](#configuration-sources).
+Typically, you should not need to clear Fortress's configuration cache manually. 
 
-Changes will only take effect after the Fortress cache has been cleared and rebuilt.
+If you change any of your configuration sources, it is always preferred to run the `shared config:test` command, as all your current configuration sources will be
+thoroughly validated before applying them.
 
 ```shell
-wp snicco/fortress shared cache:clear
+wp snicco/fortress shared config:test --reload-on-success
 ```
 
-### Staging sites and site migration
+If you need to clear the cache manually, you can run the [`shared cache:clear`](../wp-cli/readme.md#cache--clear) command.
 
-The Fortress configuration cache must be cleared if any of the following data changes:
+### Self-invalidation
 
+Fortress will automatically clear its caches and reload all configuration sources if any of the following values change on the WordPress site:
+
+- The Fortress version.
+- The PHP version.
+- The WordPress version.
 - Absolute/relative filesystem paths where WP/Fortress is running.
-- Change of the site URL (See [`get_site_url`](https://developer.wordpress.org/reference/functions/get_site_url/)).
 - Changes to the WP-admin area URL (See [`admin_url`](https://developer.wordpress.org/reference/functions/admin_url/)).
-- Changes to the WP login URL (See [`wp_login_url`](https://developer.wordpress.org/reference/functions/wp_login_url/))
+- Changes to the WP login URL (See [`wp_login_url`](https://developer.wordpress.org/reference/functions/wp_login_url/)).
 
-This is mostly needed because Fortress persists its [routing configuration](../../config/routing.php) in the cache to avoid extra database queries. 
+You can extend this list by providing your own cache invalidation parameters by defining
+the following ENV variable, either by setting in the `$_SERVER` super global, or by passing it through the SAPI.
+
+```php
+$_SERVER['SNICCO_FORTRESS_EXTRA_CACHE_INVALIDATION_PARAMS'] = 'your-values-here';
+```
+
+`SNICCO_FORTRESS_EXTRA_CACHE_INVALIDATION_PARAMS` must be defined before Fortress's main plugin file is loaded to have an effect. 
+Furthermore, if defined, the value **MUST** be a `non-empty-string`.
 
 ---
+
 
 Next: [Complete configuration reference](02_configuration_reference.md)

@@ -282,8 +282,21 @@ OPTIONS
 
 #### cache:clear
 
-The `wp snicco/fortress shared cache:clear` command can be used to clear all of Fortress's internal caches.
-This command needs to be run every time you [change Fortress's configuration](../configuration/01_how_to_configure_fortress.md#clearing-the-configuration-cache).
+The `wp snicco/fortress shared cache:clear` command can be used to clear Fortress's internal caches.
+Running this command will trigger a full reload/rebuild of [Fortress's configuration](../configuration/01_how_to_configure_fortress.md#clearing-the-configuration-cache).
+
+If you pass the `--factory-reset` flag, Fortress will also purge the snapshot of your [configuration sources](../configuration/01_how_to_configure_fortress.md#configuration-sources) during
+the last successful cache build. Make sure that you have tested your configuration sources using
+`shared config:test` command before running `shared cache:clear` with the `--factory-reset` flag.
+
+To protect you from accidentally wiping snapshots of  [configuration sources](../configuration/01_how_to_configure_fortress.md#configuration-sources), Fortress will prompt your for confirmation in the terminal if
+the `--factory-reset` flag is provided.
+
+In automated environments you could run the command like so:
+
+```shell
+echo 'yes' | wp snicco/fortress shared cache:clear --factory-reset
+```
 
 ```log
 NAME
@@ -292,11 +305,11 @@ NAME
 
 DESCRIPTION
 
-Remove the cached configuration. The configuration will then be rebuilt on the subsequent request.
+  Clear internal cache of Fortress. The cache will be rebuilt on the subsequent request.
 
 SYNOPSIS
 
-  wp snicco/fortress shared cache:clear [--v] [--vv] [--vvv] [--interaction] [--ansi]
+  wp snicco/fortress shared cache:clear [--v] [--vv] [--vvv] [--interaction] [--ansi] [--factory-reset]
 
 OPTIONS
 
@@ -310,10 +323,15 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+
+  [--factory-reset]
+    Reset all configuration caches. Including the backup snapshots of the last configuration sources.
+
+  Clear internal cache of Fortress. The cache will be rebuilt on the subsequent request.
 ```
 
 #### config:sources

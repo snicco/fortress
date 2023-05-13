@@ -1,3 +1,11 @@
+# [1.0.0-beta.14](https://github.com/snicco/enterprise/compare/1.0.0-beta.13...1.0.0-beta.14) (2023-05-13)
+
+
+### Features
+
+* add self invalidating configuration cache ([7ed2bf6](https://github.com/snicco/enterprise/commit/7ed2bf617326da8610c53a537239c0b69175fc6c)), closes [#47](https://github.com/snicco/enterprise/issues/47)
+* cache invalidation with nested dir ([6cbcef0](https://github.com/snicco/enterprise/commit/6cbcef0578b38f49561bf8f4378f1cf7f94da30e))
+
 # [1.0.0-beta.13](https://github.com/snicco/enterprise/compare/1.0.0-beta.12...1.0.0-beta.13) (2023-05-08)
 
 

@@ -19,7 +19,7 @@
     * [absolute_timeout_per_cap](#absolute_timeout_per_cap)
     * [absolute_timeout_remembered_user](#absolute_timeout_remembered_user)
     * [absolute_timeout_remembered_user_per_cap](#absolute_timeout_remembered_user_per_cap)
-    * [session_table_name](#session_table_name)
+    * [table_name](#table_name)
     * [remember_cookie_name](#remember_cookie_name)
     * [protected_pages](#protected_pages)
 * [Auth module](#auth-module)
@@ -376,9 +376,9 @@ remember_me" option during login.
 See: [`absolute_timeout_per_cap`](#absolutetimeoutpercap), with the difference being that this option applies when a user checks the "
 remember_me" option during login.
 
-### session_table_name
+### table_name
 
-- Key: `session_table_name`
+- Key: `table_name`
 - Type: `non-empty-string`
 - Default: `"snicco_fortress_sessions"`
 
