@@ -22,6 +22,7 @@
     * [Configuration](#configuration-3)
 * [Relationship between the timeouts](#relationship-between-the-timeouts)
 * [Troubleshooting](#troubleshooting)
+    * [WordPress nonces and Single Page Application Plugins](#wordpress-nonces-and-single-page-application-plugins) 
     * [WordPress nonces with multiple browser tabs](#wordpress-nonces-with-multiple-browser-tabs)
 <!-- TOC -->
 
@@ -283,17 +284,44 @@ A `rotation timeout > absolute` would mean that no session gets rotated.
 
 ## Troubleshooting
 
-### WordPress nonces with multiple browser tabs
+**The following sections apply only to logged-in users.**
 
-**For logged-in users only:**
+### WordPress nonces and Single Page Application Plugins
 
-The rotation timeout will always limit the timeframe in which a nonce created with [`wp_create_nonce`](https://developer.wordpress.org/reference/functions/wp_create_nonce/) is valid.
+Many popular WordPress plugins are implement as Single Page Applications (SPA) that are rendered
+once, and then use ajax for all consequent requests. 
+
+However, **some** of these SPA plugins don't fetch a new WordPress Nonce for a logged-in user if the
+current one is expired. This then leads to not being able to save the current state because of a nonce mismatch.
+
+By default, WordPress nonces are valid for 24 hours which means that issue should surface rarely. 
+
+However, with Fortress enabled, the `rotation timeou`t will always limit the timeframe in which a nonce created with [`wp_create_nonce`](https://developer.wordpress.org/reference/functions/wp_create_nonce/) is valid.
 
 This is because WordPress [uses the user's current session token as part of the nonce](https://github.com/WordPress/wordpress-develop/blob/6.1/src/wp-includes/pluggable.php#L2341).
 
 If the session is rotated, the session token will be different; thus, a nonce created before rotating the session token will no longer be valid.
 
-Example:
+If this becomes an issue in your workflow, **we always recommend creating different user roles**
+for content editing and "real" administrative tasks.
+That way, you can keep the shorter rotation timeouts for privileged users while allowing users
+that solely edit content to use SPA plugins without any issues. 
+
+Alternatively, you can use the [`disable_rotation_for_ajax_like_requests_per_cap`](../../configuration/02_configuration_reference.md#disablerotationforajaxlikerequestspercap) to define
+user capabilities for which Fortress should not rotate the session token for ajax like requests.
+This allows you to use your SPA plugins without issues while still being able to benefit from 
+the security of a short rotation timeout.
+
+Fortress considers a request to be ajax like if any of the following conditions are true:
+
+- The request specified `application/json` as the `HTTP_ACCEPT` header.
+- The request specifies `XMLHttpRequest` in the `HTTP_X_REQUESTED_WITH` header.
+- The request goes to the `wp-admin/admin-ajax.php` endpoint.
+- The request goes to the WordPress REST-API `/wp-json`.
+
+### WordPress nonces with multiple browser tabs
+
+Take the following example:
 
 - A user logs in at 10:00 and goes to `/page-1`, which contains a form with a nonce. The rotation timeout is `five minutes`.
 - At 10:06, the user clicks on a link to a `/article-1` that opens a new browser tab.

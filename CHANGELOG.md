@@ -1,3 +1,19 @@
+# [1.0.0-beta.15](https://github.com/snicco/enterprise/compare/1.0.0-beta.14...1.0.0-beta.15) (2023-05-19)
+
+
+### Bug Fixes
+
+* ensure that fortress logs sort alphabetically ([6496bd0](https://github.com/snicco/enterprise/commit/6496bd06432261617ff6053bfe23a69d20560f5b)), closes [#58](https://github.com/snicco/enterprise/issues/58)
+* fix incorrect html label attribute on device id page ([c82e160](https://github.com/snicco/enterprise/commit/c82e160318987ac03a8a5c86ab35ccbb2190440d))
+
+
+### Features
+
+* allow to skip session token rotation for ajax like requests ([acf1c25](https://github.com/snicco/enterprise/commit/acf1c25e2dfa9fe3d588d0b4477f5df7662d26dd)), closes [#59](https://github.com/snicco/enterprise/issues/59)
+* delay fortress routes until after 'plugins_loaded' ([4a4c12a](https://github.com/snicco/enterprise/commit/4a4c12a7c1fb87f24824100a0c9dc4ce276397a7))
+* trigger warnings if pluggable functions are already defined pre fortress boot ([dab6839](https://github.com/snicco/enterprise/commit/dab68391a6a73643f8a337291c5fb21ff3bf11c1))
+* use sanitized request_target instead of path in log context ([6f3bfdf](https://github.com/snicco/enterprise/commit/6f3bfdf5bc82155f8b103c93bbaad43c1f2feb9a))
+
 # [1.0.0-beta.14](https://github.com/snicco/enterprise/compare/1.0.0-beta.13...1.0.0-beta.14) (2023-05-13)
 
 

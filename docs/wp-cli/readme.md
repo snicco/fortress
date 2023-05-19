@@ -14,9 +14,9 @@
     * [Shared](#shared)
         * [info](#info)
         * [cache:config](#cache:config)
-        * [cache:clear](#cache-clear)
-        * [config:sources](#config-sources)
-        * [config:test](#config-test)
+        * [cache:clear](#cacheclear)
+        * [config:sources](#configsources)
+        * [config:test](#configtest)
         * [trigger-activation](#trigger-activation)
     * [Password](#password)
         * [upgrade-legacy-hashes](#upgrade-legacy-hashes)
@@ -30,7 +30,7 @@
         * [totp:setup](#totpsetup)
         * [totp:complete](#totpcomplete)
         * [totp:deactivate](#totpdeactivate)
-        * [totp:reset-recovery-codes](#totpreset-recovery-codes)
+        * [totp:reset-recovery-codes](#totpresetrecoverycodes)
 <!-- TOC -->
 
 ## Introduction
@@ -219,8 +219,6 @@ OPTIONS
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
-  Outputs information about the current Fortress installation
 ```
 
 #### cache:config
@@ -248,7 +246,7 @@ DESCRIPTION
 
 SYNOPSIS
 
-  wp snicco/fortress shared cache:config [--key=<key>] [--v] [--vv] [--vvv] [--interaction] [--ansi] [--pretty]
+  wp snicco/fortress shared cache:config [--key=<key>] [--pretty] [--v] [--vv] [--vvv] [--interaction] [--ansi]
 
 OPTIONS
 
@@ -258,6 +256,9 @@ OPTIONS
     ---
     default: fortress
     ---
+
+  [--pretty]
+    Controls if the JSON output should be pretty-printed.
 
   [--v]
     Verbose output
@@ -273,11 +274,6 @@ OPTIONS
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
-  [--pretty]
-    Controls if the JSON output should be pretty-printed.
-
-  Displays the current cached configuration.
 ```
 
 #### cache:clear
@@ -309,9 +305,12 @@ DESCRIPTION
 
 SYNOPSIS
 
-  wp snicco/fortress shared cache:clear [--v] [--vv] [--vvv] [--interaction] [--ansi] [--factory-reset]
+  wp snicco/fortress shared cache:clear [--factory-reset] [--v] [--vv] [--vvv] [--interaction] [--ansi]
 
 OPTIONS
+
+  [--factory-reset]
+    Reset all configuration caches. Including the backup snapshots of the last configuration sources.
 
   [--v]
     Verbose output
@@ -327,11 +326,6 @@ OPTIONS
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
-  [--factory-reset]
-    Reset all configuration caches. Including the backup snapshots of the last configuration sources.
-
-  Clear internal cache of Fortress. The cache will be rebuilt on the subsequent request.
 ```
 
 #### config:sources
@@ -353,7 +347,7 @@ DESCRIPTION
 
 SYNOPSIS
 
-  wp snicco/fortress shared config:sources [--type=<type>] [--v] [--vv] [--vvv] [--interaction] [--ansi] [--pretty]
+  wp snicco/fortress shared config:sources [--type=<type>] [--pretty] [--v] [--vv] [--vvv] [--interaction] [--ansi]
 
 OPTIONS
 
@@ -365,6 +359,9 @@ OPTIONS
       - server
       - site
     ---
+
+  [--pretty]
+    Controls if the JSON output should be pretty-printed.
 
   [--v]
     Verbose output
@@ -380,12 +377,6 @@ OPTIONS
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
-  [--pretty]
-    Controls if the JSON output should be pretty-printed.
-
-  Displays all configuration sources that are used on this site.
-
 ```
 
 #### config:test
@@ -404,8 +395,8 @@ DESCRIPTION
 
 SYNOPSIS
 
-  wp snicco/fortress shared config:test [--format=<format>] [--v] [--vv] [--vvv] [--interaction] [--ansi]
-  [--reload-on-success]
+  wp snicco/fortress shared config:test [--format=<format>] [--reload-on-success] [--v] [--vv] [--vvv] [--interaction]
+  [--ansi]
 
 OPTIONS
 
@@ -417,6 +408,9 @@ OPTIONS
       - text
       - json
     ---
+
+  [--reload-on-success]
+    Automatically clear internal caches and reload the configuration if it is valid.
 
   [--v]
     Verbose output
@@ -432,11 +426,6 @@ OPTIONS
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
-  [--reload-on-success]
-    Automatically clear internal caches and reload the configuration if it is valid.
-
-  Tests that all configuration sources are valid.
 ```
 
 #### trigger-activation
@@ -468,11 +457,10 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
 ```
 
 ### Password
@@ -517,8 +505,8 @@ SYNOPSIS
 OPTIONS
 
   [--batch-size=<batch-size>]
-    The batch size should be kept between 500-1000 users. This ensures that only a small amount of rows will be locked
-    at a time in the database.
+    The batch size should be kept between 500-1000 users. This ensures that only a small amount of rows will be locked at
+    a time in the database.
     ---
     default: "500"
     ---
@@ -533,7 +521,7 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
@@ -576,24 +564,24 @@ NAME
 
 DESCRIPTION
 
-  Force resets the passwords of all users except the excluded ones. Users will need to choose a new password.
+  Force resets the passwords of all users expect the excluded ones. Users will need to choose a new password.
 
 SYNOPSIS
 
-  wp snicco/fortress password force-reset-all [--skip-roles=<skip-roles>] [--batch-size=<batch-size>] [--v] [--vv]
-  [--vvv] [--interaction] [--ansi]
+  wp snicco/fortress password force-reset-all [--skip-roles=<skip-roles>] [--batch-size=<batch-size>] [--v] [--vv] [--vvv]
+  [--interaction] [--ansi]
 
 OPTIONS
 
   [--skip-roles=<skip-roles>]
-    Comma-separated list of user roles whose passwords should NOT be reset.
+    Comma seperated list of users roles whose passwords should NOT be reset.
     ---
     default: ""
     ---
 
   [--batch-size=<batch-size>]
-    The batch size should be kept between 500-1000 users. This ensures that only a small amount of rows will be locked
-    at a time in the database.
+    The batch size should be kept between 500-1000 users. This ensures that only a small amount of rows will be locked at
+    a time in the database.
     ---
     default: "500"
     ---
@@ -608,7 +596,7 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
@@ -627,8 +615,8 @@ NAME
 
 DESCRIPTION
 
-  Set the password of a user to a securely generated password. The password will be strongly hashed and encrypted and
-  can only be verified if the password module is active.
+  Set the password of a user to securely generated password. The password will be strongly hashed and encrypted and can
+  only be verified if the password module is active.
 
 SYNOPSIS
 
@@ -637,7 +625,7 @@ SYNOPSIS
 OPTIONS
 
   <user_login>
-    The username of an existing user.
+    The username or email of an existing user.
 
   [--v]
     Verbose output
@@ -649,7 +637,7 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
@@ -691,11 +679,10 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
 ```
 
 #### destroy-all
@@ -711,7 +698,7 @@ NAME
 
 DESCRIPTION
 
-  Destroy all sessions for all users. This will log out all users.
+  Destroy all sessions for all users. This will logout all users.
 
 SYNOPSIS
 
@@ -729,11 +716,10 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
 ```
 
 #### toggle-sudo
@@ -759,7 +745,7 @@ SYNOPSIS
 OPTIONS
 
   <user_id_or_token>
-    A user id or an explicit (hashed) session token. The most recently active session is used if a user id is passed.
+    A user id or an explicit (hashed) session token. If a user id is passed the most recently active session is used.
 
   [--v]
     Verbose output
@@ -771,11 +757,10 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
 ```
 
 ### Auth
@@ -805,7 +790,7 @@ NAME
 
 DESCRIPTION
 
-  Set up new TOTP credentials for a WordPress user.
+  Setup new TOTP credentials for a WordPress user.
 
 SYNOPSIS
 
@@ -817,8 +802,7 @@ OPTIONS
     A valid WordPress user ID, username, or user email.
 
   [--force-complete]
-    Force complete the setup and skip TOTP validation. Use this option when setting up credentials for different
-    users.
+    Force complete the setup and skip TOTP validation. Use this option when setting up credentials for different users.
 
   [--v]
     Verbose output
@@ -830,7 +814,7 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
@@ -873,11 +857,10 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
 ```
 
 #### totp:deactivate
@@ -917,7 +900,7 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
@@ -936,7 +919,8 @@ NAME
 
 DESCRIPTION
 
-  Generate a new set of TOTP recovery codes for a WordPress user. The old recovery codes are invalidated, while the TOTP secret stays unchanged.
+  Generate a new set of TOTP recovery codes for a WordPress users. The old recovery codes are invalidated. The TOTP secret
+  stays the same.
 
 SYNOPSIS
 
@@ -957,11 +941,10 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive questions.
+    (--no-interaction) Do not ask any interactive question.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
-
 ```
 
 ---

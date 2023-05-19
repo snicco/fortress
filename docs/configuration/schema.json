@@ -196,6 +196,15 @@
             "/snicco-fortress/auth/totp/manage*"
           ],
           "description": "The protected_pages option specifies URL paths that a user can only access if his session is still in sudo mode. You can use a * character as a wildcard."
+        },
+        "disable_rotation_for_ajax_like_requests_per_cap": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "The `disable_rotation_for_ajax_like_requests_per_cap` option can be used to disable the rotation of session tokens for ajax like requests for users with any of the specified capabilities."
+
         }
       }
     },

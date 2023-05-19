@@ -69,7 +69,7 @@ Furthermore, Fortress's [error log](logging.md#e) now contains the following ent
 
 ```log
 [01-Feb-2023 17:44:58 UTC] snicco_fortress.http.ERROR The two-factor challenge with selector [atVPwkvZncyJEZ9-9z8p4QhJpGyphV0e5pD2e4EHiQzKisSljkkDOM24nuQNT-_ZnBn7Q_1mq9oi] was expired since [1] second/s.
-   Context: ['user_id' => 0, 'path' => '/snicco-fortress/auth/totp/atVPwkvZncyJEZ9-9z8p4QhJpGyphV0e5pD2e4EHiQzKisSljkkDOM24nuQNT-_ZnBn7Q_1mq9oi', 'request_method' => 'GET', 'identifier' => '00000000386fa518000000005688d11f'] 
+   Context: ['user_id' => 0, 'request_target' => '/snicco-fortress/auth/totp/challenge/**************', 'request_method' => 'GET', 'identifier' => '00000000386fa518000000005688d11f'] 
    Snicco\Enterprise\Component\Challenge\Exception\ChallengeExpired "The two-factor challenge with selector [atVPwkvZncyJEZ9-9z8p4QhJpGyphV0e5pD2e4EHiQzKisSljkkDOM24nuQNT-_ZnBn7Q_1mq9oi] was expired since [10] second/s." in /var/www/html/wp-content/component/challenge/src/Exception/ChallengeExpired.php:18
    Stack trace:
    #0 /var/www/html/wp-content/plugins/snicco-fortress/src/Auth/Login/Infrastructure/Http/Controller/TOTPLoginController.php(89): Snicco\Enterprise\Component\Challenge\Exception\ChallengeExpired::forSelector('atVPwkvZncyJEZ9...', 10)
@@ -94,7 +94,7 @@ Since the user is logged in, Fortress will display the highlighted exception ide
 
 ```log
 [02-Feb-2023 15:18:36 UTC] snicco_fortress.http.ERROR Can't show TOTP force-setup page to user [1] because TOTP setup is already completed.
-   Context: ['identifier' => '0000000037d945ab000000004a848bb8', 'user_id' => 1, 'path' => '/snicco-fortress/auth/totp/manage/force-setup', 'request_method' => 'GET'] 
+   Context: ['identifier' => '0000000037d945ab000000004a848bb8', 'user_id' => 1, 'request_target' => '/snicco-fortress/auth/totp/manage/force-setup', 'request_method' => 'GET'] 
    Snicco\Component\Psr7ErrorHandler\HttpException "Can't show TOTP force-setup page to user [1] because TOTP setup is already completed." in /var/www/html/wp-content/plugins/snicco-fortress/src/Auth/TOTP/Infrastructure/Http/Controller/TOTPCredentialsController.php:105
    Stack trace:
 ```

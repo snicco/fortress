@@ -22,6 +22,7 @@
     * [table_name](#table_name)
     * [remember_cookie_name](#remember_cookie_name)
     * [protected_pages](#protected_pages)
+    * [disable_rotation_for_ajax_like_requests_per_cap](#disable_rotation_for_ajax_like_requests_per_cap)
 * [Auth module](#auth-module)
     * [totp_secrets_table_name](#totp_secrets_table_name)
     * [totp_sha_algo](#totp_sha_algo)
@@ -117,7 +118,8 @@ You can find a JSON schema of Fortress's configuration [here](schema.json). You 
             "/wp-admin/theme-editor.php",
             "/wp-admin/plugin-editor.php",
             "/snicco-fortress/auth/totp/manage*"
-        ]
+        ],
+        "disable_rotation_for_ajax_like_requests_per_cap": []
     },
     "auth": {
         "totp_secrets_table_name": "snicco_fortress_totp_secrets",
@@ -437,6 +439,30 @@ The following configuration would prevent users whose sessions are not in sudo m
     "session": {
         "protected_pages": [
             "/wp-admin/*"
+        ]
+    }
+}
+```
+
+### disable_rotation_for_ajax_like_requests_per_cap
+
+- Key: `disable_rotation_for_ajax_like_requests_per_cap`
+- Type: `string[]`
+- Default: `[]`
+
+The `disable_rotation_for_ajax_like_requests_per_cap` option can be used
+to disable the rotation of session tokens for ajax like requests for users with any
+of the specified capabilities.
+
+The following configuration would prevent rotating session for subscribers and authors for
+ajax like requests.
+
+```json
+{
+    "session": {
+        "disable_rotation_for_ajax_like_requests_per_cap": [
+            "subscriber",
+            "author"
         ]
     }
 }
