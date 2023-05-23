@@ -1,3 +1,15 @@
+# [1.0.0-beta.16](https://github.com/snicco/enterprise/compare/1.0.0-beta.15...1.0.0-beta.16) (2023-05-23)
+
+
+### Bug Fixes
+
+* upgrade snicco/* to 1.6.2, fixes issue with uppercase db prefix ([1559bef](https://github.com/snicco/enterprise/commit/1559befceaf930c52aeea412fc2e833566bb0ef5)), closes [snicco/fortress#1](https://github.com/snicco/fortress/issues/1)
+
+
+### Features
+
+* support reserved mysql keywords and backticks in all db queries ([cefc93c](https://github.com/snicco/enterprise/commit/cefc93cabb9e1f6c319437ea5536f83b2827f846))
+
 # [1.0.0-beta.15](https://github.com/snicco/enterprise/compare/1.0.0-beta.14...1.0.0-beta.15) (2023-05-19)
 
 
