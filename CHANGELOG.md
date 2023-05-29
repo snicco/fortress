@@ -1,3 +1,11 @@
+# [1.0.0-beta.17](https://github.com/snicco/enterprise/compare/1.0.0-beta.16...1.0.0-beta.17) (2023-05-29)
+
+
+### Features
+
+* add cli command to reset failed totp attempts ([cbf00ca](https://github.com/snicco/enterprise/commit/cbf00ca55a12105eb45c9d3a7cd4b2d6811a76e3))
+* don't reset totp attempts for privileged users ([5fe7e9a](https://github.com/snicco/enterprise/commit/5fe7e9ace1356753e290be84cf30586205cc3449)), closes [#60](https://github.com/snicco/enterprise/issues/60)
+
 # [1.0.0-beta.16](https://github.com/snicco/enterprise/compare/1.0.0-beta.15...1.0.0-beta.16) (2023-05-23)
 
 

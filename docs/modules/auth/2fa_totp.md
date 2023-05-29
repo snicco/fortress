@@ -221,13 +221,15 @@ Fortress has your back, even though none of the "competing" WordPress plugins se
 |--------------------------------------------------------------------|
 
 By default, Fortress allows five failed 2FA attempts. This can be configured with the [`max_totp_attempts_before_lockout`](../../configuration/02_configuration_reference.md#max_totp_attempts_before_lockout) option.
-The failed attempts counter is reset after a successful 2FA login.
+The failed attempts counter is reset after a successful 2FA login, **unless** the user is considered privileged.
 
 If the threshold is exceeded, Fortress will "lock" the user account which means:
 
 - Destroying all sessions (including the current one) for the associated user.
 - Resetting the password of the user to a completely random one.
 - Sending the user an email about the incident.
+
+For privileged users, the failed attempts can only be reset by using the: `wp snicco/fortress auth totp:reset-failed-attempts` [command](../../wp-cli/readme.md#totpreset-failed-attempts).
 
 ### Replay / Reuse protection
 

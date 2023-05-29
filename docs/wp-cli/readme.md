@@ -13,7 +13,7 @@
 * [Command reference](#command-reference)
     * [Shared](#shared)
         * [info](#info)
-        * [cache:config](#cache:config)
+        * [cache:config](#cacheconfig)
         * [cache:clear](#cacheclear)
         * [config:sources](#configsources)
         * [config:test](#configtest)
@@ -30,7 +30,8 @@
         * [totp:setup](#totpsetup)
         * [totp:complete](#totpcomplete)
         * [totp:deactivate](#totpdeactivate)
-        * [totp:reset-recovery-codes](#totpresetrecoverycodes)
+        * [totp:reset-recovery-codes](#totpreset-recovery-codes)
+        * [totp:reset-failed-attempts](totp-reset-failed-attempts)
 <!-- TOC -->
 
 ## Introduction
@@ -908,7 +909,7 @@ OPTIONS
 
 #### totp:reset-recovery-codes
 
-The `wp snicco/fortress auth totp:reset-recovery-codes` can be used to reset a user's TOTP recovery codes in case the user uses access to them or assumes them to be compromised.
+The `wp snicco/fortress auth totp:reset-recovery-codes` command can be used to reset a user's TOTP recovery codes in case the user uses access to them or assumes them to be compromised.
 
 This command does NOT reset the TOTP-secret so that nothing has to be changed regarding the authenticator app.
 
@@ -925,6 +926,45 @@ DESCRIPTION
 SYNOPSIS
 
   wp snicco/fortress auth totp:reset-recovery-codes <user> [--v] [--vv] [--vvv] [--interaction] [--ansi]
+
+OPTIONS
+
+  <user>
+    A valid WordPress user ID, username, or user email.
+
+  [--v]
+    Verbose output
+
+  [--vv]
+    More verbose output
+
+  [--vvv]
+    Maximum verbosity (equal to --debug)
+
+  [--interaction]
+    (--no-interaction) Do not ask any interactive question.
+
+  [--ansi]
+    Force (or disable --no-ansi) ANSI output.
+```
+
+### totp:reset-failed-attempts
+
+The `wp snicco/fortress auth totp:reset-failed-attempts` command can be used reset the allowed failed attempts
+for TOTP 2FA for a given user to the default value of [`max_totp_attempts_before_lockout`](../configuration/02_configuration_reference.md#max_totp_attempts_before_lockout).
+
+```log
+NAME
+
+  wp snicco/fortress auth totp:reset-failed-attempts
+
+DESCRIPTION
+
+  Resets the allowed totp attempts to the default value for a given user.
+
+SYNOPSIS
+
+  wp snicco/fortress auth totp:reset-failed-attempts <user> [--v] [--vv] [--vvv] [--interaction] [--ansi]
 
 OPTIONS
 
