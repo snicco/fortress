@@ -31,7 +31,7 @@
         * [totp:complete](#totpcomplete)
         * [totp:deactivate](#totpdeactivate)
         * [totp:reset-recovery-codes](#totpreset-recovery-codes)
-        * [totp:reset-failed-attempts](totp-reset-failed-attempts)
+        * [totp:reset-failed-attempts](#totp-reset-failed-attempts)
 <!-- TOC -->
 
 ## Introduction
