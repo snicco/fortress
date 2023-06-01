@@ -258,6 +258,16 @@
           "description": "The maximum amount of failed 2FA attempts allowed before locking an account.",
           "minimum": 1,
           "default": 5
+        },
+        "magic_link_show_on_wp_login_form": {
+          "type": "boolean",
+          "default": true,
+          "description": "Controls whether Fortress shows a link to the custom Magic Link Login page on the default wp-login.php page."
+        },
+        "magic_link_allow_requesting_via_http": {
+          "type": "boolean",
+          "default": true,
+          "description": "Controls whether Fortress allows anybody to request a magic login link via the UI/HTTP.\nSetting this option to `false` makes Fortress behave as is the functionality to request Magic Links doesn't exist."
         }
       }
     },

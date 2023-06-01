@@ -74,7 +74,7 @@ You can use the following code snippet to make Fortress skip the TOTP-2FA check.
 We do not advise this, and you should avoid using automated authentication methods like application passwords for high-privilege user accounts requiring 2FA.
 
 ```php
-use Snicco\Enterprise\Fortress\Auth\Login\Infrastructure\Event\Exposed\DeterminingIf2FaShouldBeSkipped;
+use Snicco\Enterprise\Fortress\Auth\TOTP\Infrastructure\Event\DeterminingIf2FaShouldBeSkipped;
 
 add_action(DeterminingIf2FaShouldBeSkipped::class, function (DeterminingIf2FaShouldBeSkipped $event): void {
     
@@ -105,7 +105,7 @@ If the `$_REQUEST` does not contain one of the above keys, Fortress will use the
 You can customize the redirect location using the following code snippet, if your site uses a custom login scheme or third-party plugin that does not use any of the above request keys:
 
 ```php
-use Snicco\Enterprise\Fortress\Auth\Login\Infrastructure\Event\Exposed\Determining2FARedirectContext;
+use Snicco\Enterprise\Fortress\Auth\TOTP\Infrastructure\Event\Determining2FARedirectContext;
 
 add_action(Determining2FARedirectContext::class, function (Determining2FARedirectContext $event) :void {
    $event->redirect_too = '/some-other-page';
@@ -119,7 +119,7 @@ Suppose your site uses a third-party plugin that performs ajax logins. In that c
 The returned `WP_Error` object contains the link to the login challenge, and the plugin will most likely render the error object in its front-end login form.
 
 ```php
-use Snicco\Enterprise\Fortress\Auth\Login\Infrastructure\Event\Exposed\RedirectingUserWith2FAEnabled;
+use Snicco\Enterprise\Fortress\Auth\TOTP\Infrastructure\Event\RedirectingUserWith2FAEnabled;
 
 add_action(RedirectingUserWith2FAEnabled::class, function (RedirectingUserWith2FAEnabled $event) :void {
    $event->turnRedirectIntoWPError();

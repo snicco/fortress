@@ -1,3 +1,15 @@
+# [1.0.0-beta.18](https://github.com/snicco/enterprise/compare/1.0.0-beta.17...1.0.0-beta.18) (2023-06-01)
+
+
+### Bug Fixes
+
+* set device id cookie for root path "/" instead of current path ([5d03050](https://github.com/snicco/enterprise/commit/5d03050540f176729c40f9994f01875dc8c5a41a))
+
+
+### Features
+
+* add magic login links ([8a99ae7](https://github.com/snicco/enterprise/commit/8a99ae71ba1d1a27442d3244307091642fdd3576))
+
 # [1.0.0-beta.17](https://github.com/snicco/enterprise/compare/1.0.0-beta.16...1.0.0-beta.17) (2023-05-29)
 
 

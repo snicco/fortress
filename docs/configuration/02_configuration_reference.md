@@ -30,6 +30,8 @@
     * [require_2fa_for_roles](#require_2fa_for_roles)
     * [require_2fa_for_roles_before_login](#require_2fa_for_roles_before_login)
     * [max_totp_attempts_before_lockout](#max_totp_attempts_before_lockout)
+    * [magic_link_show_on_wp_login_form](#magic_link_show_on_wp_login_form)
+    * [magic_link_allow_requesting_via_http](#magic_link_allow_requesting_via_http)
 * [Password module](#password-module)
     * [password_policy_excluded_roles](#password_policy_excluded_roles)
     * [disable_application_passwords](#disable_application_passwords)
@@ -537,19 +539,40 @@ The following configuration:
 
 has the following effects:
 
-- An administrator can only log in if he has confirmed 2FA credentials.
+- An administrator can only log in if they have confirmed 2FA credentials.
 - No administrator will be able to deactivate 2FA for his account.
 
 This significantly hardens the site against attacks that attempts to create an undetected admin account since the account will not be able to log in due to missing 2FA credentials.
 
-### `max_totp_attempts_before_lockout`
+### max_totp_attempts_before_lockout
 
 - Key: `max_totp_attempts_before_lockout`
 - Type: `positive-integer`
 - Default: `5`
 
-This option represents the maximum amount of failed 2FA attempts that Fortress will allow
+This option represents the maximum number of failed 2FA attempts that Fortress will allow
 before locking an account.
+
+### magic_link_show_on_wp_login_form
+
+- Key: `magic_link_show_on_wp_login_form`
+- Type: `bool`
+- Default: `true`
+
+Controls whether Fortress shows a link to the custom Magic Link Login page
+on the default wp-login.php page.
+
+### magic_link_allow_requesting_via_http
+
+- Key: `magic_link_allow_requesting_via_http`
+- Type: `bool`
+- Default: `true`
+
+Controls whether Fortress allows anybody to request a magic login link
+via the UI/HTTP. 
+
+Setting this option to `false` makes Fortress behave as is the functionality to request
+Magic Links doesn't exist.
 
 ## Password module
 

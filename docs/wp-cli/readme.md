@@ -32,6 +32,7 @@
         * [totp:deactivate](#totpdeactivate)
         * [totp:reset-recovery-codes](#totpreset-recovery-codes)
         * [totp:reset-failed-attempts](#totp-reset-failed-attempts)
+        * [magic-link:create](#magic-linkcreate)
 <!-- TOC -->
 
 ## Introduction
@@ -970,6 +971,55 @@ OPTIONS
 
   <user>
     A valid WordPress user ID, username, or user email.
+
+  [--v]
+    Verbose output
+
+  [--vv]
+    More verbose output
+
+  [--vvv]
+    Maximum verbosity (equal to --debug)
+
+  [--interaction]
+    (--no-interaction) Do not ask any interactive question.
+
+  [--ansi]
+    Force (or disable --no-ansi) ANSI output.
+```
+
+### magic-link:create
+
+The `wp snicco/fortress auth magic-link:create` command can be used created [Magic Login Links](../modules/auth/magic_login_links.md) for any user.
+
+```log
+NAME
+
+  wp snicco/fortress auth magic-link:create
+
+DESCRIPTION
+
+  Creates a one-time, magic login link for the provided user.
+
+SYNOPSIS
+
+  wp snicco/fortress auth magic-link:create <user> [--bypass-2fa] [--sso] [--email] [--v] [--vv] [--vvv]
+  [--interaction] [--ansi]
+
+OPTIONS
+
+  <user>
+    A valid username, email, or id.
+
+  [--bypass-2fa]
+    Allow the login link to bypass Fortress's 2FA if the user has it configured.
+
+  [--sso]
+    Allow the login link to bypass other plugin's potential 2FA/login checks.
+
+  [--email]
+    Send the login link to the user's account email instead of outputting it. Can't be combined with
+    --bypass-2fa/--sso.
 
   [--v]
     Verbose output
