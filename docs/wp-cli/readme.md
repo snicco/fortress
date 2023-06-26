@@ -1003,8 +1003,8 @@ DESCRIPTION
 
 SYNOPSIS
 
-  wp snicco/fortress auth magic-link:create <user> [--bypass-2fa] [--sso] [--email] [--v] [--vv] [--vvv]
-  [--interaction] [--ansi]
+  wp snicco/fortress auth magic-link:create <user> [--bypass-2fa] [--sso] [--email] [--skip-squeeze-page] [--v] [--vv]
+  [--vvv] [--interaction] [--ansi]
 
 OPTIONS
 
@@ -1020,6 +1020,9 @@ OPTIONS
   [--email]
     Send the login link to the user's account email instead of outputting it. Can't be combined with
     --bypass-2fa/--sso.
+
+  [--skip-squeeze-page]
+    Immediately try to log in the user on the first GET request instead of displaying a squeeze page.
 
   [--v]
     Verbose output

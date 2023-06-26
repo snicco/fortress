@@ -1,3 +1,11 @@
+# [1.0.0-beta.19](https://github.com/snicco/enterprise/compare/1.0.0-beta.18...1.0.0-beta.19) (2023-06-26)
+
+
+### Features
+
+* allow cli magic links to skip squeeze page ([2797764](https://github.com/snicco/enterprise/commit/27977641099d1fe3519d9a5276a62473d9ed36fa))
+* redirect logged-in users with a valid magic link ([7836ad8](https://github.com/snicco/enterprise/commit/7836ad86fc04efa62c2d9fca7f84679f03bb1625))
+
 # [1.0.0-beta.18](https://github.com/snicco/enterprise/compare/1.0.0-beta.17...1.0.0-beta.18) (2023-06-01)
 
 
