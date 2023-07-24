@@ -1,0 +1,9 @@
+name: "📚 Documentation error/request"
+description: " Something is wrong, unclear or missing in the documentation. "
+title: "Docs: <YOUR TITLE GOES HERE>"
+body:
+  - type: textarea
+    attributes:
+      label: "Which part of the documentation is unclear, missing or wrong?"
+    validations:
+      required: true

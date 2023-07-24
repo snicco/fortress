@@ -2,7 +2,10 @@ blank_issues_enabled: false
 contact_links:
   - name: Feature Request
     url: https://github.com/snicco/fortress/discussions/new?category=feature-requests
-    about: "Discuss ideas for new features or enhancements."
-  - name: Questions & Help
+    about: "Share ideas for new features or upvote existing feature requests."
+  - name: Q&A
     url: https://github.com/snicco/fortress/discussions/new?category=q-a
-    about: "Ask the community for help with any issue that is not a Bug in Fortress nor a reproducible third-party compatability report."
+    about: "Ask the community for help with any issue such as best practices, configurations, etc."
+  - name: Troubleshooting Help Discussions
+    url: https://github.com/snicco/fortress/discussions/new?category=troubleshooting-help
+    about: "Ask the community for help on errors/issues that you can't reproduce or pinpoint down."
