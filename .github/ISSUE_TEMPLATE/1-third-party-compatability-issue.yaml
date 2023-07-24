@@ -1,0 +1,174 @@
+name: "Third Party Compatability Issue"
+description: "Report an issue that arises between Fortress and your specific WordPress installation."
+title: "Third Party: <YOUR TITLE GOES HERE>"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Support Scope:** 
+        
+        Unless otherwise specified on your invoice/plan, we don't guarantee troubleshooting support for any issues related
+        to any third party themes and plugins that you install in combination with Fortress.
+        In almost all cases, issues are caused by poorly coded plugins/themes. 
+        
+        However, if you are able to pinpoint the issue to a specific plugin/theme (setting) we'll usually be able to help you out
+        and provide you an idea on how to move forward:
+        
+        - If there an issue in Fortress's codebase that causes other plugins to error, we'll fix it ASAP. (This is very rare)
+        - Provide you guidelines on what the third-party software needs to fix in their code.
+        - Potentially, provide you a code snippet to fix the third-party software.
+        
+        If you are able to reproduce the issue without ANY third party plugins and themes, open a [`Fortress Bug`](https://github.com/snicco/fortress/issues/new/choose) instead.
+        
+        We need your assistance to help you as fast as possible. The more information you provide, the quicker we can resolve your issue.
+        
+        Invalid/Incomplete issues can not be processed. If you don't know how to provide the required information, ask the community for [`Troubleshooting Help`](https://github.com/snicco/issue-templates-test/discussions/new?category=troubleshooting-help).
+      
+        Please try to give your issue a good title:
+        - ✅ Ajax login form of Acme plugin crashes with Fortress 2FA enabled.
+        - ❌ I can't log in anymore.
+  - type: markdown
+    attributes:
+      value: |
+        **HINT**: Have you tried [searching](https://github.com/snicco/fortress/issues) for similar issues? Duplicate issues are common.
+        
+        **Are you reporting a security vulnerability?** [Submit it here instead](https://github.com/snicco/fortress/security/policy).
+        
+        ---
+
+  - type: checkboxes
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have verified that the reported issue does not occur anymore when I disable Fortress temporarily.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: "**Hot Tip:** Record your screen and attach images/videos here."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Did this work before?
+      description: "If this worked before, what Fortress version worked correctly?"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "All your installed plugins and themes"
+      description: "Run the following WP-CLI command and paste the output: `wp plugin list && wp theme list`.<br>This will be automatically formatted into code, so no need for backticks."
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "Third party software responsible for the issue"
+      placeholder: "Plugin A, in combination with setting X of plugin B."
+      description: |
+        We need to know which third party software component(s) make this issue surface. If you can pinpoint the exact plugin settings, even better.<br>
+        
+        1. Disable all plugins and verify that the functionality works with just Fortress active.
+            1.1 If the functionality does not work, it's likely an issue in your Theme.
+        2. Activate the next plugin.
+        3. Verify if the functionality still works.
+        4. As soon as the the functionality breaks:
+            4.1 Remember the plugin.
+            4.2 Disable **all** plugins again.
+            4.3 Enable **only** the "remembered plugin".
+            4.4 Does the issue still happen? => You found the root cause.
+        5. Repeat at step 2 until the functionality breaks.
+    validations:
+      required: true
+
+  - type: dropdown
+    validations:
+      required: true
+    attributes:
+      label: "Usage with default plugin/theme settings."
+      description: "Does the issue persist if you reset the configuration of the responsible plugin/theme to the defaults?"
+      multiple: false
+      options:
+        - "Yes"
+        - "No"
+
+  - type: textarea
+    attributes:
+      label: How can we reproduce this?
+      description: "Describe which plugin/theme we should install and which plugins/theme settings are required."
+      placeholder: "Steps to reproduce..."
+      value: |
+        1. Install the ACME plugin.
+        2. Enable the 'XYZ' setting.
+        3. Try to log in as an admin.
+        4. You should see an error page.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "Hosting"
+      description: "Where are you hosting the affect site?"
+      placeholder: "Examples: GridPane, Self-Hosted on AWS, etc."
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "WordPress Version"
+      description: "What WordPress version (range) does this bug occur on?"
+      placeholder: "6.3.0"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Fortress Version"
+      description: Please copy and paste the output of running `wp snicco/fortress shared info`. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: "Operating System"
+      description: "Please copy and paste the output of running `wp --info`. This will be automatically formatted into code, so no need for backticks."
+      render: shell
+
+  - type: dropdown
+    validations:
+      required: true
+    attributes:
+      label: "Is this an error/exception that occurs on Fortress managed pages?"
+      description: "[Click here to see how Fortress error pages look like](https://github.com/snicco/fortress/blob/beta/docs/_assets/images/debugging-and-more/error-logged-in-user.png)."
+      multiple: false
+      options:
+        - "Yes"
+        - "No"
+
+  - type: textarea
+    attributes:
+      label: "Log output"
+      description: "Please copy and paste the exact output of your WordPress debug log that is added immediately following the issue.
+      <br>Make sure to include stack traces, if applicable. 
+      <br>This will be automatically formatted into code, so no need for backticks."
+      placeholder: "MAKE SURE TO SANITIZE POTENTIALLY SENSITIVE DATA SUCH AS URLS WITH LOGIN/2FA CHALLENGES."
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Additional information"
+      description: "Is there anything else that you'd like us to know?"

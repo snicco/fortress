@@ -1,0 +1,124 @@
+name: "Fortress Bug"
+description: "File a bug report for issues that can be reproduced on a default WordPress installation with Fortress."
+title: "Bug: <YOUR TITLE GOES HERE>"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Support Scope:** 
+
+        A bug, by definition, is an issue with Fortress that can be consistently reproduced on a default WordPress installation without any plugins.
+
+        If your issue does not meet these requirements, open a [`Third Party Compatability Issue`](https://github.com/snicco/fortress/issues/new/choose) or ask the community for [`Troubleshooting Help`](https://github.com/snicco/issue-templates-test/discussions/new?category=troubleshooting-help).
+
+        We need your assistance to help you as fast as possible. The more information you provide, the quicker we can resolve your issue.
+        Invalid/Incomplete bug reports will not be processed.
+      
+        Please try to give your issue a good title:
+        - ✅ Exception is thrown during opportunistic password hashing for admin logins on WordPress 6.3.
+        - ❌ I can't log in anymore.
+  - type: markdown
+    attributes:
+      value: |
+        **HINT**: Have you tried [searching](https://github.com/snicco/fortress/issues) for similar issues? Duplicate issues are common.
+        
+        **Are you reporting a security vulnerability?** [Submit it here instead](https://github.com/snicco/fortress/security/policy).
+        
+        ---
+
+  - type: checkboxes
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have been able to reproduce the reported issue on a default WordPress installation without plugins and a default theme. The issue goes away if I disable Fortress.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: "**Hot Tip:** Record your screen and attach images/videos here."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Did this work before?
+      description: "If this worked before, what Fortress version worked correctly?"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: How can we reproduce this?
+      placeholder: "Steps to reproduce..."
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "Hosting"
+      description: "Where are you hosting the affect site?"
+      placeholder: "Examples: GridPane, Self-Hosted on AWS, etc."
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "WordPress Version"
+      description: "What WordPress version (range) does this bug occur on?"
+      placeholder: "6.3.0"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Fortress Version"
+      description: Please copy and paste the output of running `wp snicco/fortress shared info`. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: "Operating System"
+      description: "Please copy and paste the output of running `wp --info`. This will be automatically formatted into code, so no need for backticks."
+      render: shell
+
+  - type: dropdown
+    validations:
+      required: true
+    attributes:
+      label: "Is this an error/exception that occurs on Fortress managed pages?"
+      description: "[Click here to see how Fortress error pages look like](https://github.com/snicco/fortress/blob/beta/docs/_assets/images/debugging-and-more/error-logged-in-user.png)."
+      multiple: false
+      options:
+        - "Yes"
+        - "No"
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: "Log output"
+      description: "Please copy and paste the exact output of your WordPress debug log that is added immediately following the issue.
+      <br>Make sure to include stack traces, if applicable. 
+      <br>This will be automatically formatted into code, so no need for backticks."
+      placeholder: "MAKE SURE TO SANITIZE POTENTIALLY SENSITIVE DATA SUCH AS URLS WITH LOGIN/2FA CHALLENGES."
+      render: shell
+
+  - type: textarea
+    attributes:
+      label: "Additional information"
+      description: "Is there anything else that you'd like us to know?"

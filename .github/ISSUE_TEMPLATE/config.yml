@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Request
+    url: https://github.com/snicco/fortress/discussions/new?category=feature-requests
+    about: "Discuss ideas for new features or enhancements."
+  - name: Questions & Help
+    url: https://github.com/snicco/fortress/discussions/new?category=q-a
+    about: "Ask the community for help with any issue that is not a Bug in Fortress nor a reproducible third-party compatability report."

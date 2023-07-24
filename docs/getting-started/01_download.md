@@ -24,7 +24,7 @@ you can download releases using the GitHub Web UI or the GitHub REST API.
 
 ## Web UI
 
-1. Go to the [release archive](https://github.com/snicco/enterprise/releases).
+1. Go to the [release archive](https://github.com/snicco/fortress-dist/releases).
 2. Click on the version that you want to download.
 3. Click on `Assets`.
 4. Download the .zip file named `snicco-fortress-<VERSION>.zip`.
@@ -43,14 +43,14 @@ curl \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <YOUR-PERSONAL_ACCESS_TOKEN>"\
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/snicco/enterprise/releases
+  https://api.github.com/repos/snicco/fortress-dist/releases
    
   # Or GitHub CLI api
   # https://cli.github.com/manual/gh_api
 
   gh api \
   -H "Accept: application/vnd.github+json" \
-  /repos/snicco/enterprise/releases
+  /repos/snicco/fortress-dist/releases
 ```
 
 The above request will return an array of [release objects](https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#list-releases).
@@ -62,7 +62,7 @@ curl \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <YOUR-PERSONAL_ACCESS_TOKEN>"\
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/snicco/enterpise/releases/latest
+  https://api.github.com/repos/snicco/fortress-dist/releases/latest
 ```
 
 ### Get the latest version name (including beta releases)
@@ -74,7 +74,7 @@ curl \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <YOUR-PERSONAL_ACCESS_TOKEN>"\
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/snicco/enterprise/releases | jq .[0].tag_name
+  https://api.github.com/repos/snicco/fortress-dist/releases | jq .[0].tag_name
 
 # ==> "1.0.0-beta.1"
 ```
@@ -86,7 +86,7 @@ curl \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <YOUR-PERSONAL_ACCESS_TOKEN>"\
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/snicco/enterprise/releases | jq .[0].assets[0].url
+  https://api.github.com/repos/snicco/fortress-dist/releases | jq .[0].assets[0].url
 
 # ==> "https://api.github.com/repos/snicco/enterprise/releases/assets/92177402"
 ```
@@ -97,7 +97,7 @@ curl \
 curl -O -J -L \
   -H "Authorization: Bearer <YOUR-PERSONAL_ACCESS_TOKEN>" \
   -H "Accept: application/octet-stream" \
-  https://api.github.com/repos/snicco/enterprise/releases/assets/92177402
+  https://api.github.com/repos/snicco/fortress-dist/releases/assets/92177402
 
 # It's important to set the Accept header to application/octet-stream
 ```
@@ -113,7 +113,7 @@ Instead of using the above curl commands, you could use the below one-liner:
 export GITHUB_OAUTH_TOKEN=<YOUR-PERSONAL_ACCESS_TOKEN>
 
 fetch \
-  --repo="https://github.com/snicco/enterprise" \
+  --repo="https://github.com/snicco/fortress-dist" \
   --tag="1.0.0-beta.1" \
   --release-asset="snicco-fortress-.*"
 ```
