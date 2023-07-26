@@ -1,3 +1,15 @@
+# [1.0.0-beta.20](https://github.com/snicco/enterprise/compare/1.0.0-beta.19...1.0.0-beta.20) (2023-07-26)
+
+
+### Bug Fixes
+
+* security => fix incomplete audit log sanitization ([053aa88](https://github.com/snicco/enterprise/commit/053aa88ca591c5c0abb4ba1e846d0cba7f2136fd))
+
+
+### Features
+
+* handle invalid device ids gracefully ([d0ba399](https://github.com/snicco/enterprise/commit/d0ba3997f772ecc37fb6666abbe3e477c0f2b3b7))
+
 # [1.0.0-beta.19](https://github.com/snicco/enterprise/compare/1.0.0-beta.18...1.0.0-beta.19) (2023-06-26)
 
 

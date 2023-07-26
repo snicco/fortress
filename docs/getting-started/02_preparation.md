@@ -154,7 +154,7 @@ Fortress will default to write logs to `/path/to/snicco-fortress/var/log`.
 
 You can, and **should change** this by setting the `$_SERVER` env value of `SNICCO_FORTRESS_LOG_DIR` to a **writeable directory that already exists**.
 
-**The log directory should be outside the webroot!**
+**The log directory MUST be outside the webroot in production!**
 
 ```php
 // /var/www/html/wp-config.php
@@ -169,7 +169,7 @@ Fortress will default to write its internal cache to `/path/to/snicco-fortress/v
 
 You can, and **should change** this by setting the `$_SERVER` env value of `SNICCO_FORTRESS_CACHE_DIR` to a **writeable directory that already exists**.
 
-**The cache directory should be outside the webroot!**
+**The cache directory MUST be outside the webroot in production!**
 
 ```php
 // /var/www/html/wp-config.php
