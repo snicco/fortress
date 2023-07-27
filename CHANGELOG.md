@@ -1,9 +1,9 @@
 # [1.0.0-beta.20](https://github.com/snicco/enterprise/compare/1.0.0-beta.19...1.0.0-beta.20) (2023-07-26)
 
 
-### Bug Fixes
+### Security
 
-* security => fix incomplete audit log sanitization ([053aa88](https://github.com/snicco/enterprise/commit/053aa88ca591c5c0abb4ba1e846d0cba7f2136fd))
+* fix incomplete audit log sanitization ([053aa88](https://github.com/snicco/enterprise/commit/053aa88ca591c5c0abb4ba1e846d0cba7f2136fd)). Check out the [advisory](https://github.com/snicco/fortress/security/advisories/GHSA-q2qj-gpv9-929g) here.
 
 
 ### Features
