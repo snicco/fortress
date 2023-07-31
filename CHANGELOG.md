@@ -1,3 +1,10 @@
+# [1.0.0-beta.21](https://github.com/snicco/enterprise/compare/1.0.0-beta.20...1.0.0-beta.21) (2023-07-31)
+
+
+### Bug Fixes
+
+* trigger activation after wp core updates ([599e725](https://github.com/snicco/enterprise/commit/599e725c7123745fcd270b899d027b33036b8ac9))
+
 # [1.0.0-beta.20](https://github.com/snicco/enterprise/compare/1.0.0-beta.19...1.0.0-beta.20) (2023-07-26)
 
 
