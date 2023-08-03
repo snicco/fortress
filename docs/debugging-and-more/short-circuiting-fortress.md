@@ -1,23 +1,15 @@
 # Short-circuiting Fortress
 
 <!-- TOC -->
-  * [Completely disabling Fortress](#completely-disabling-fortress)
   * [Disabling specific modules](#disabling-specific-modules)
     * [Disabling the password module](#disabling-the-password-module)
+    * [Disabling the Vaults & Pillars module](#disable-the-vaults--pillars-module)
+  * [Completely disabling/removing Fortress](#completely-disablingremoving-fortress)
 <!-- TOC -->
-
-## Completely disabling Fortress
-
-Fortress can be preventing from doing anything by defining the following constant in the wp-config file (or any other file that is loaded before mu-plugins).
-
-```php
-define('SNICCO_FORTRESS_LOADED', true);
-```
-**Important: Also see [Disabling the password module](#disabling-the-password-module)** since disabling Fortress also disables the password module.
 
 ## Disabling specific modules
 
-Each of Fortress's [four modules](../readme.md#modules) can be used independently.
+Each of Fortress's [five modules](../readme.md#modules) can be used independently.
 
 To temporarily disable a module remove it from the [`modules` option](../configuration/02_configuration_reference.md#modules).
 
@@ -39,6 +31,27 @@ Important: If for whatever reason you need to disable the Fortress password modu
     ```
 
 These steps are needed because [Fortress password hashes only work when Fortress is enabled](../modules/password/password-hashing.md#migrating-out-hashes).
+
+### Disable the Vaults & Pillars module
+
+Important: If for whatever reason, you need to disable the `Vaults & Pillars` you **MUST**
+[unseal all your `Vaults/Pillars`](../modules/vaults_and_pillars/wordpress_options.md#removing-all-vaults-and-pillars). 
+
+Otherwise, upon deactivating the `Vaults & Pillars` module, WordPress will not receive the real
+option values anymore since the `Vaults & Pillars` translation layer is missing.
+
+## Completely disabling/removing Fortress
+
+Fortress can be preventing from doing anything by defining the following constant in the wp-config file (or any other file that is loaded before mu-plugins).
+
+```php
+define('SNICCO_FORTRESS_LOADED', true);
+```
+
+⚠️ ⚠️ ⚠️ 
+
+If you short-circuit or remove Fortress,
+you **MUST** follow all the documented steps in the [Disabling Specific Modules](#disabling-specific-modules) section.
 
 --- 
 

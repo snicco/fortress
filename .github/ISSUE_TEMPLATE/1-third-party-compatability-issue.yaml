@@ -139,6 +139,30 @@ body:
       required: true
 
   - type: textarea
+    attributes:
+      label: "Current Fortress Configuration"
+      description: Please copy and paste the output of running `wp snicco/fortress shared config:test`. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Cached Fortress Configuration"
+      description: Please copy and paste the output of running `wp snicco/fortress shared cache:config`. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Fortress Configuration Sources"
+      description: Please copy and paste the output of running `wp snicco/fortress shared config:sources`. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
     validations:
       required: true
     attributes:

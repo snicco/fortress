@@ -5,6 +5,7 @@
 * [Root-level](#root-level)
     * [modules](#modules)
     * [url_namespace](#url_namespace)
+    * [cli_namespace](#cli_namespace)
     * [challenges_table_name](#challenges_table_name)
     * [privileged_user_roles](#privileged_user_roles)
     * [theme_css_file](#theme_css_file)
@@ -56,9 +57,19 @@
     * [syslog_daemon](#syslog_daemon)
     * [syslog_flags](#syslog_flags)
     * [syslog_facility](#syslog_facility)
+* [Vaults & Pillars module](#vaults--pillars-module)
+  * [strict_option_vaults_and_pillars](#strictoptionvaultsandpillars)
+  * [option_pillars](#optionpillars)
+  * [option_vaults](#optionvaults)
 <!-- TOC -->
 
 ## Overview
+
+You can find a JSON schema of Fortress's configuration [here](schema.json). You can use the JSON schema in your favorite IDE to provide syntax highlighting, auto-completion and validation.
+This is highly recommended when editing Fortress configuration locally:
+
+- [PHPStorm: How to add custom schema sources.](https://www.jetbrains.com/help/phpstorm/json.html#ws_json_schema_add_custom)
+- [Visual Studio Code: How to add custom schema sources](https://code.visualstudio.com/docs/languages/json).
 
 Below is the JSON representation of the **cached** baseline configuration of Fortress without any modification through
 any of the supported [configuration sources](01_how_to_configure_fortress.md#configuration-sources).
@@ -68,102 +79,109 @@ explained [here](01_how_to_configure_fortress.md#how-configuration-is-stored-and
 > Many of the values are created dynamically in the [fortress.php](../../config/fortress.php) config file during the first
 cache built.
 
-You can find a JSON schema of Fortress's configuration [here](schema.json). You can use the JSON schema in your favorite IDE to provide syntax highlighting, auto-completion and validation.
 
 ```json
 {
-    "modules": [
-        "password",
-        "session",
-        "auth",
-        "rate_limit"
+  "modules": [
+    "password",
+    "session",
+    "auth",
+    "rate_limit",
+    "vaults_and_pillars"
+  ],
+  "url_namespace": "/snicco-fortress",
+  "cli_namespace": "snicco/fortress",
+  "challenges_table_name": "snicco_fortress_challenges",
+  "privileged_user_roles": [
+    "administrator",
+    "editor"
+  ],
+  "theme_css_file": "/wp-content/plugins/snicco-fortress/default-theme.css",
+  "session": {
+    "sudo_mode_timeout": 600,
+    "sudo_mode_timeout_per_cap": [],
+    "idle_timeout": 1800,
+    "idle_timeout_per_cap": [],
+    "rotation_timeout": 1200,
+    "rotation_timeout_per_cap": [],
+    "absolute_timeout": 43200,
+    "absolute_timeout_per_cap": [],
+    "absolute_timeout_remembered_user": 86400,
+    "absolute_timeout_remembered_user_per_cap": [],
+    "table_name": "snicco_fortress_sessions",
+    "remember_cookie_name": "snicco_fortress_remember_me",
+    "protected_pages": [
+      "/wp-admin/update-core.php",
+      "/wp-admin/themes.php",
+      "/wp-admin/theme-install.php",
+      "/wp-admin/plugins.php",
+      "/wp-admin/plugin-install.php",
+      "/wp-admin/users.php",
+      "/wp-admin/user-new.php",
+      "/wp-admin/profile.php",
+      "/wp-admin/update.php",
+      "/wp-admin/options-*",
+      "/wp-admin/authorize-application.php",
+      "/wp-admin/tools.php",
+      "/wp-admin/import.php",
+      "/wp-admin/export.php",
+      "/wp-admin/site-health.php",
+      "/wp-admin/export-personal-data.php",
+      "/wp-admin/erase-personal-data.php",
+      "/wp-admin/theme-editor.php",
+      "/wp-admin/plugin-editor.php",
+      "/snicco-fortress/auth/totp/manage*"
     ],
-    "url_namespace": "/snicco-fortress",
-    "cli_namespace": "snicco/fortress",
-    "challenges_table_name": "snicco_fortress_challenges",
-    "privileged_user_roles": [
-        "administrator",
-        "editor"
-    ],
-    "theme_css_file": "/wp-content/plugins/snicco-fortress/default-theme.css",
-    "session": {
-        "sudo_mode_timeout": 600,
-        "sudo_mode_timeout_per_cap": [],
-        "idle_timeout": 1800,
-        "idle_timeout_per_cap": [],
-        "rotation_timeout": 1200,
-        "rotation_timeout_per_cap": [],
-        "absolute_timeout": 43200,
-        "absolute_timeout_per_cap": [],
-        "absolute_timeout_remembered_user": 86400,
-        "absolute_timeout_remembered_user_per_cap": [],
-        "table_name": "snicco_fortress_sessions",
-        "remember_cookie_name": "snicco_fortress_remember_me",
-        "protected_pages": [
-            "/wp-admin/update-core.php",
-            "/wp-admin/themes.php",
-            "/wp-admin/theme-install.php",
-            "/wp-admin/plugins.php",
-            "/wp-admin/plugin-install.php",
-            "/wp-admin/users.php",
-            "/wp-admin/user-new.php",
-            "/wp-admin/profile.php",
-            "/wp-admin/update.php",
-            "/wp-admin/options-*",
-            "/wp-admin/authorize-application.php",
-            "/wp-admin/tools.php",
-            "/wp-admin/import.php",
-            "/wp-admin/export.php",
-            "/wp-admin/site-health.php",
-            "/wp-admin/export-personal-data.php",
-            "/wp-admin/erase-personal-data.php",
-            "/wp-admin/theme-editor.php",
-            "/wp-admin/plugin-editor.php",
-            "/snicco-fortress/auth/totp/manage*"
-        ],
-        "disable_rotation_for_ajax_like_requests_per_cap": []
-    },
-    "auth": {
-        "totp_secrets_table_name": "snicco_fortress_totp_secrets",
-        "totp_sha_algo": "sha1",
-        "skip_2fa_setup_duration_seconds": 1800,
-        "require_2fa_for_roles_before_login": [],
-        "max_totp_attempts_before_lockout": 5,
-        "require_2fa_for_roles": [
-            "administrator",
-            "editor"
-        ]
-    },
-    "password": {
-        "password_policy_excluded_roles": [],
-        "disable_application_passwords": true,
-        "allow_legacy_hashes": true,
-        "default_hash_strength": "moderate",
-        "auto_upgrade_hashes": true,
-        "include_pluggable_functions": true,
-        "disable_web_password_reset_for_roles": [
-            "administrator",
-            "editor"
-        ]
-    },
-    "rate_limit": {
-        "storage": "auto",
-        "cache_group": "snicco_fortress_rate_limits",
-        "device_id_cookie_prefix": "device_id",
-        "device_id_burst": 5,
-        "device_id_refill_one_token_seconds": 20,
-        "username_burst": 5,
-        "username_refill_one_token_seconds": 900,
-        "ip_burst": 20,
-        "ip_refill_one_token_seconds": 1800,
-        "global_burst": 100,
-        "global_refill_one_token_seconds": 30,
-        "use_hashed_ips": false,
-        "log_to_syslog": true,
-        "syslog_daemon": "snicco_fortress",
-        "syslog_flags": 1,
-        "syslog_facility": 32
-    }
+    "disable_rotation_for_ajax_like_requests_per_cap": []
+  },
+  "auth": {
+    "totp_secrets_table_name": "snicco_fortress_totp_secrets",
+    "totp_sha_algo": "sha1",
+    "skip_2fa_setup_duration_seconds": 1800,
+    "require_2fa_for_roles_before_login": [],
+    "max_totp_attempts_before_lockout": 5,
+    "magic_link_show_on_wp_login_form": true,
+    "magic_link_allow_requesting_via_http": true,
+    "require_2fa_for_roles": [
+      "administrator",
+      "editor"
+    ]
+  },
+  "password": {
+    "password_policy_excluded_roles": [],
+    "disable_application_passwords": true,
+    "allow_legacy_hashes": true,
+    "default_hash_strength": "moderate",
+    "auto_upgrade_hashes": true,
+    "include_pluggable_functions": true,
+    "disable_web_password_reset_for_roles": [
+      "administrator",
+      "editor"
+    ]
+  },
+  "rate_limit": {
+    "storage": "auto",
+    "cache_group": "snicco_fortress_rate_limits",
+    "device_id_cookie_prefix": "device_id",
+    "device_id_burst": 5,
+    "device_id_refill_one_token_seconds": 20,
+    "username_burst": 5,
+    "username_refill_one_token_seconds": 900,
+    "ip_burst": 20,
+    "ip_refill_one_token_seconds": 1800,
+    "global_burst": 100,
+    "global_refill_one_token_seconds": 30,
+    "use_hashed_ips": false,
+    "log_to_syslog": true,
+    "syslog_daemon": "snicco_fortress",
+    "syslog_flags": 1,
+    "syslog_facility": 32
+  },
+  "vaults_and_pillars": {
+    "option_pillars": [],
+    "option_vaults": [],
+    "strict_option_vaults_and_pillars": false
+  }
 }
 ```
 
@@ -194,6 +212,28 @@ By default, the 2FA management page is accessible at `/snicco-fortress/auth/totp
 
 Changing the value of `url_namespace` to `/1234/acme-host` would in result make the 2FA management page accessible
 at `/1234/acme-host/auth/totp/manage`.
+
+### cli_namespace
+
+- Key: `cli_namespace`
+- Type: `non-empy-string`
+- Default: `/snicco-fortress`
+
+The `cli_namespace` is the shared prefix of the Fortress CLI.
+
+Example:
+
+By default, the [Info](../wp-cli/readme.md#info) CLI command would look like this:
+
+```shell
+wp snicco/fortress shared info
+```
+
+Changing the value of `cli_namespace` to `acme-security` would mean that the Fortress CLI has to be used like so:
+
+```shell
+wp acme-security shared info
+```
 
 ### challenges_table_name
 
@@ -806,3 +846,107 @@ A bitmask, valid options can be found in the [`openlog`](https://www.php.net/man
 ---
 
 Next: [The Fortress password module](../modules/password/readme.md).
+
+## Vaults & Pillars module
+
+- JSON namespace: `"vaults_and_pillars"`
+
+### strict_option_vaults_and_pillars
+
+- Key: `strict_option_vaults_and_pillars`
+- Type: `boolean`
+- Default: `false`
+
+The `strict_option_vaults_and_pillars` option can be used to enable the [`Vaults & Pillars` `Strict Mode`](../modules/vaults_and_pillars/wordpress_options.md#strict-mode-in-vaults-and-pillars) for WordPress options.
+
+### option_pillars
+
+- Key: `option_pillars`
+- Type: `object`
+- Default: `{}`
+
+The `option_pillars` option defines all [Pillars](../modules/vaults_and_pillars/wordpress_options.md#pillars) for WordPress Options.
+
+The exact required structure is documented [here](../modules/vaults_and_pillars/wordpress_options.md#setting-up-pillars)
+and in the [Fortress schema.json](schema.json):
+
+```json
+{
+  "option_pillars": {
+    "type": "object",
+    "default": {},
+    "patternProperties": {
+      "^.*$": {
+        "type": "object",
+        "properties": {
+          "expand_key": {
+            "type": "boolean",
+            "default": true
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          },
+          "env_var": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "value"
+            ]
+          },
+          {
+            "required": [
+              "env_var"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+### option_vaults
+
+- Key: `option_vaults`
+- Type: `object`
+- Default: `{}`
+
+The `option_vaults` option defines all [Vaults](../modules/vaults_and_pillars/wordpress_options.md#vaults) for WordPress Options.
+
+The exact required structure is documented [here](../modules/vaults_and_pillars/wordpress_options.md#setting-up-vaults)
+and in the [Fortress schema.json](schema.json):
+
+```json
+{
+  "option_vaults": {
+    "type": "object",
+    "default": {},
+    "patternProperties": {
+      "^.*$": {
+        "type": "object",
+        "properties": {
+          "expand_key": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```

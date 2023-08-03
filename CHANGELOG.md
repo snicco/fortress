@@ -1,3 +1,10 @@
+# [1.0.0-beta.22](https://github.com/snicco/enterprise/compare/1.0.0-beta.21...1.0.0-beta.22) (2023-08-03)
+
+
+### Features
+
+* add vaults and pillars module ([6a3b990](https://github.com/snicco/enterprise/commit/6a3b990424fb21befc655be689328d153fb717bf))
+
 # [1.0.0-beta.21](https://github.com/snicco/enterprise/compare/1.0.0-beta.20...1.0.0-beta.21) (2023-07-31)
 
 

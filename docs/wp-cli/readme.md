@@ -33,6 +33,10 @@
         * [totp:reset-recovery-codes](#totpreset-recovery-codes)
         * [totp:reset-failed-attempts](#totp-reset-failed-attempts)
         * [magic-link:create](#magic-linkcreate)
+    * [Vaults & Pillars](#vaults--pillars)
+      * [options:purge-cache](#optionspurge-cache)
+      * [options:seal-all](#optionsseal-all)
+      * [options:unseal-all](#optionsunseal-all)
 <!-- TOC -->
 
 ## Introduction
@@ -169,7 +173,6 @@ This won't work for commands that run in an automated fashion. In this scenario,
     echo "yes" | wp snicco/fortress some-command
     ```
 - Use the `--no-interaction` flag, in which case Fortress will assume that the default answer was chosen.
-
 
 ## Command reference
 
@@ -467,7 +470,7 @@ OPTIONS
 
 ### Password
 
-The commands `wp snicco/fortress password` namespace belong to the [password module](../modules/password/readme.md) and are only available if the former is enabled.
+The commands in the `wp snicco/fortress password` namespace belong to the [password module](../modules/password/readme.md) and are only available if the former is enabled.
 
 #### upgrade-legacy-hashes
 
@@ -647,7 +650,7 @@ OPTIONS
 
 ### Session
 
-The commands `wp snicco/fortress session` namespace belong to the [session module](../modules/session/readme.md) and are only available if the former is enabled.
+The commands in the `wp snicco/fortress session` namespace belong to the [session module](../modules/session/readme.md) and are only available if the former is enabled.
 
 
 #### gc
@@ -767,7 +770,7 @@ OPTIONS
 
 ### Auth
 
-The commands `wp snicco/fortress auth` namespace belong to the [auth module](../modules/auth/readme.md) and are only available if the former is enabled.
+The commands in the `wp snicco/fortress auth` namespace belong to the [auth module](../modules/auth/readme.md) and are only available if the former is enabled.
 
 #### totp:setup
 
@@ -949,7 +952,7 @@ OPTIONS
     Force (or disable --no-ansi) ANSI output.
 ```
 
-### totp:reset-failed-attempts
+#### totp:reset-failed-attempts
 
 The `wp snicco/fortress auth totp:reset-failed-attempts` command can be used reset the allowed failed attempts
 for TOTP 2FA for a given user to the default value of [`max_totp_attempts_before_lockout`](../configuration/02_configuration_reference.md#max_totp_attempts_before_lockout).
@@ -988,7 +991,7 @@ OPTIONS
     Force (or disable --no-ansi) ANSI output.
 ```
 
-### magic-link:create
+#### magic-link:create
 
 The `wp snicco/fortress auth magic-link:create` command can be used created [Magic Login Links](../modules/auth/magic_login_links.md) for any user.
 
@@ -1043,3 +1046,75 @@ OPTIONS
 ---
 
 Next: [Short-circuiting Fortress](../debugging-and-more/short-circuiting-fortress.md).
+
+
+### Vaults & Pillars
+
+The commands int `wp snicco/fortress vnp` namespace belong to the [`Vaults & Pillars`](../modules/vaults_and_pillars/readme.md) module and are only available if the former is enabled.
+
+#### options:purge-cache
+
+The `wp snicco/fortress vnp options:purge-cache` command can be used to delete the WordPress Object cache
+for all options that have at least one `Vault` or `Pillar` configured.
+
+During [staging/production workflows](../modules/vaults_and_pillars/wordpress_options.md#staging-to-production-workflows),
+it might be required to purge the WordPress Object Cache for added/changed/removed `Vaults/Pillars`.
+
+The above command is preferred over running `wp cache flush` since it will only purge the cache
+for relevant options whereas a full cache flush might cause performance degradation.
+
+#### options:seal-all
+
+The `wp snicco/fortress vnp options:seal-all` command can be used to encrypt all configured `Vaults` and replace all configured `Pillars` with placeholders in the database.
+
+If this command is not run, `Vaults/Pillars` are only updated opportunistically during calls to `get_option`, 
+which is not desired since there is no guarantee that get_option is going to be called in a timely manner.
+
+This command is destructure and will ask for [user confirmation](#interactivity):
+
+```console
+$ wp snicco/fortress vnp options:seal-all
+
+
+ This command is potentially destructive and can not be reversed other than restoring a backup.
+ Are you running this on a staging/development site and did you take a backup? (yes/no) [no]:
+ > 
+```
+
+If you need to run this command in an automated environment, you can do like so:
+
+```shell
+echo 'yes' | wp snicco/fortress vnp options:seal-all
+```
+
+This command **can not** be run
+if the `Vaults & Pillars` [`Strict Mode`](../modules/vaults_and_pillars/wordpress_options.md#strict-mode-in-vaults-and-pillars) is enabled.
+
+This command is **idempotent** and can safely be re-run multiple times.
+
+#### options:unseal-all
+
+The `wp snicco/fortress vnp options:unseal-all` command can be used
+to decrypt all configured `Vaults` and replace all configured `Pillars` placeholders in the database with the actual values.
+
+This command is destructure and will ask for [user confirmation](#interactivity):
+
+```console
+$ wp snicco/fortress vnp options:unseal-all
+
+
+ This command is potentially destructive and can not be reversed other than restoring a backup.
+ Are you running this on a staging/development site and did you take a backup? (yes/no) [no]:
+ > 
+```
+
+If you need to run this command in an automated environment, you can do like so:
+
+```shell
+echo 'yes' | wp snicco/fortress vnp options:unseal-all
+```
+
+This command **can not** be run
+if the `Vaults & Pillars` [`Strict Mode`](../modules/vaults_and_pillars/wordpress_options.md#strict-mode-in-vaults-and-pillars) is enabled.
+
+This command is **idempotent** and can safely be re-run multiple times.

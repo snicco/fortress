@@ -22,7 +22,8 @@
         "password",
         "session",
         "auth",
-        "rate_limit"
+        "rate_limit",
+        "vaults_and_pillars"
       ],
       "description": "Determines the actively used modules of Fortress."
     },
@@ -204,7 +205,6 @@
           },
           "default": [],
           "description": "The `disable_rotation_for_ajax_like_requests_per_cap` option can be used to disable the rotation of session tokens for ajax like requests for users with any of the specified capabilities."
-
         }
       }
     },
@@ -398,8 +398,8 @@
           "default": 30,
           "description": "The interval in seconds after which ONE more login request is possible globally."
         },
-        "log_to_syslog" : {
-          "type" : "boolean",
+        "log_to_syslog": {
+          "type": "boolean",
           "default": true,
           "description": "Whether failed login requests during active rate-limiting should be logged to the syslog"
         },
@@ -419,6 +419,77 @@
           "minimum": 1,
           "default": 32,
           "description": "A bitmask, valid options can be found in the openlog manual. Defaults to LOG_AUTH"
+        }
+      }
+    },
+    "vaults_and_pillars": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "strict_option_vaults_and_pillars": {
+          "type": "boolean",
+          "description": "Controls whether Vaults & Pillars will run in Strict Mode.",
+          "default": false
+        },
+        "option_vaults": {
+          "type": "object",
+          "default": {},
+          "patternProperties": {
+            "^.*$": {
+              "type": "object",
+              "properties": {
+                "expand_key": {
+                  "type": "boolean",
+                  "default": true
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "option_pillars": {
+          "type": "object",
+          "default": {},
+          "patternProperties": {
+            "^.*$": {
+              "type": "object",
+              "properties": {
+                "expand_key": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                },
+                "env_var": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "oneOf": [
+                {
+                  "required": [
+                    "value"
+                  ]
+                },
+                {
+                  "required": [
+                    "env_var"
+                  ]
+                }
+              ]
+            }
+          }
         }
       }
     }

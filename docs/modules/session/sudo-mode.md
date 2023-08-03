@@ -286,4 +286,4 @@ You need to define this before the `init` hook fires.
 
 ---
 
-Next: [WP-CLI](../../wp-cli/readme.md).
+Next: [Vaults & Pillars](../vaults_and_pillars/readme.md).
