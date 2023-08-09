@@ -1,3 +1,10 @@
+# [1.0.0-beta.23](https://github.com/snicco/enterprise/compare/1.0.0-beta.22...1.0.0-beta.23) (2023-08-09)
+
+
+### Bug Fixes
+
+* prevent dbdelta from resetting wp_users.user_pass ([1121505](https://github.com/snicco/enterprise/commit/11215051f9ca981c007add1d89aa91452cd92b42))
+
 # [1.0.0-beta.22](https://github.com/snicco/enterprise/compare/1.0.0-beta.21...1.0.0-beta.22) (2023-08-03)
 
 
