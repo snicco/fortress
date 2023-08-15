@@ -48,6 +48,7 @@
 * [Compatibility and Troubleshooting](#compatibility-and-troubleshooting)
     * [Plugins directly querying the database](#plugins-directly-querying-the-database)
     * [An option with Vault/Pillar is fetched before Fortress boots](#an-option-with-vaultpillar-is-fetched-before-fortress-boots)
+    * [Nested options that are JSON encoded](#nested-options-that-are-json-encoded)
 <!-- TOC -->
 
 ---
@@ -191,6 +192,10 @@ Option names can be found in various ways:
 
    This is an example of searching for all options that start with `fluent`. The WP CLI output shows the option
    name (`option_name`) and its value (`option_value`).
+
+Note: Several tutorials with actual plugins are available here:
+
+https://snicco.io/blog/tag/vaults-and-pillars
 
 ### Covering Vaults
 
@@ -837,15 +842,19 @@ Follow these steps when removing one or more **Vaults** and/or **Pillars**:
     ```
 3. To decrypt all `Vaults` in the database and replace `Pillar` placeholders with real values, run the [following command](../../wp-cli/readme.md#optionsunseal-all):
     ```shell
-    wp snicco/fortress vnp options:unseal-all
+    wp snicco/fortress vnp options:unseal-all --skip-plugins --skip-themes --skip-packages
     ```
+   The `--skip-plugins --skip-themes --skip-packages` is added to prevent opportunistic re-encryption if a plugin fetches a Vault/Pillar during the command.
+   
 4. Remove the [`Vaults`](#setting-up-vaults) and [`Pillars`](#setting-up-pillars) from
    your [configuration](../../configuration/01_how_to_configure_fortress.md) file.
 5. [Test and reload](../../configuration/01_how_to_configure_fortress.md#testing-your-configuration-sources) your
    configuration by running:
     ```shell
-    wp snicco/fortress shared config:test --reload-on-success
+    wp snicco/fortress shared config:test --reload-on-success --skip-plugins --skip-themes --skip-packages
     ```
+   The `--skip-plugins --skip-themes --skip-packages` is added to prevent opportunistic re-encryption if a plugin fetches a Vault/Pillar during the command.
+   
 6. Optionally: If you only removed **some**, you need to encrypt the remaining `Vaults` / `Pillars` in the database and
    replace them with placeholders again with the [following command](../../wp-cli/readme.md#optionsseal-all)
     ```shell
@@ -869,15 +878,18 @@ If you wish to remove all `Vaults` and `Pillars` or turn off the module altogeth
     ```
 3. To decrypt all `Vaults` in the database and replace `Pillar` placeholders with the real values, run the [following command](../../wp-cli/readme.md#optionsunseal-all)
     ```shell
-    wp snicco/fortress vnp options:unseal-all
+    wp snicco/fortress vnp options:unseal-all --skip-plugins --skip-themes --skip-packages
     ```
+   The `--skip-plugins --skip-themes --skip-packages` is added to prevent opportunistic re-encryption if a plugin fetches a Vault/Pillar during the command.
+   
 4. Remove all [`Vaults`](#setting-up-vaults) and [`Pillars`](#setting-up-pillars) from
    your [configuration](../../configuration/01_how_to_configure_fortress.md) file.
 5. [Test and reload](../../configuration/01_how_to_configure_fortress.md#testing-your-configuration-sources) your
    configuration by running:
     ```shell
-    wp snicco/fortress shared config:test --reload-on-success
+    wp snicco/fortress shared config:test --reload-on-success --skip-plugins --skip-themes --skip-packages
     ```
+   The `--skip-plugins --skip-themes --skip-packages` is added to prevent opportunistic re-encryption if a plugin fetches a Vault/Pillar during the command.
 6. Deactivate the WordPress Maintenance Mode:
    ```shell
    wp maintenance-mode deactivate
@@ -1411,6 +1423,67 @@ However, to provide a similar level of security and stability, WordPress Core al
 and `WP_SITEURL`
 constants. These constants act similarly to `Value Pillars`, and using them is highly recommended to prevent
 redirection attacks.
+
+### Nested options that are JSON encoded
+
+Some plugins store there nested settings as JSON, instead of using WordPress's default
+serialization method.
+
+This can be identified by an option NOT starting with `a:SOME_NUMBER:{` but instead with a `[` or `{`.
+
+Let's look at an example where the PHP runtime "uses" this setting:
+
+```php
+$payment_options = [
+  'paypal' => [
+    'enabled' => true,
+    'email' => 'user@example.com',
+  ],
+  'stripe' => [
+    'enabled' => false,
+    'api_key' => 'sk_test_1234567890',
+  ],
+];
+
+// Serialize and save the options
+update_option('payment_gateway_options', $payment_options);
+```
+
+By default, this would be stored as:
+
+```log
+a:2:{s:6:"paypal";a:2:{s:7:"enabled";b:1;s:5:"email";s:15:"user@example.com";}s:6:"stripe";a:2:{s:7:"enabled";b:0;s:7:"api_key";s:16:"sk_test_1234567890";}}
+```
+
+The `a:2:{` prefix is indicative of a serialized string, which `Vaults & Pillars` supports.
+
+However, some plugins choose to JSON encode their settings array before storage:
+
+```php
+$payment_options = [
+  'paypal' => [
+    'enabled' => true,
+    'email' => 'user@example.com',
+  ],
+  'stripe' => [
+    'enabled' => false,
+    'api_key' => 'sk_test_1234567890',
+  ],
+];
+
+// JSON encode and save the options
+update_option('payment_gateway_options', json_encode($payment_options))
+```
+
+The value in the database would then look like this:
+
+```json
+{"paypal":{"enabled":true,"email":"user@example.com"},"stripe":{"enabled":false,"api_key":"sk_test_1234567890"}}
+```
+
+`Vaults & Pillars` does currently **NOT** support `Partial Vaults/Pillars` JSON options.
+
+However, there is an option feature request [here](https://github.com/snicco/fortress/discussions/9) with some workaround.
 
 ---
 

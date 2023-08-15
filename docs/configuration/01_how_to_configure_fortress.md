@@ -318,11 +318,11 @@ If you need to clear the cache manually, you can run the [`shared cache:clear`](
 Fortress will automatically clear its caches and reload all configuration sources if any of the following values change on the WordPress site:
 
 - The Fortress version.
-- The PHP version.
-- The WordPress version.
-- Absolute/relative filesystem paths where WP/Fortress is running.
-- Changes to the WP-admin area URL (See [`admin_url`](https://developer.wordpress.org/reference/functions/admin_url/)).
-- Changes to the WP login URL (See [`wp_login_url`](https://developer.wordpress.org/reference/functions/wp_login_url/)).
+- Changes to the **relative path** to the WP-admin area (See [`admin_url`](https://developer.wordpress.org/reference/functions/admin_url/)).
+
+In automated environments,
+it's recommended to run the `config:test` command before updating Fortress in order to prevent a cache build
+with invalid configuration, which would lead to Fortress being unable to boot.
 
 You can extend this list by providing your own cache invalidation parameters by defining
 the following ENV variable, either by setting in the `$_SERVER` super global, or by passing it through the SAPI.

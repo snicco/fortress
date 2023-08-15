@@ -285,19 +285,9 @@ OPTIONS
 
 The `wp snicco/fortress shared cache:clear` command can be used to clear Fortress's internal caches.
 Running this command will trigger a full reload/rebuild of [Fortress's configuration](../configuration/01_how_to_configure_fortress.md#clearing-the-configuration-cache).
-
-If you pass the `--factory-reset` flag, Fortress will also purge the snapshot of your [configuration sources](../configuration/01_how_to_configure_fortress.md#configuration-sources) during
-the last successful cache build. Make sure that you have tested your configuration sources using
-`shared config:test` command before running `shared cache:clear` with the `--factory-reset` flag.
-
-To protect you from accidentally wiping snapshots of  [configuration sources](../configuration/01_how_to_configure_fortress.md#configuration-sources), Fortress will prompt your for confirmation in the terminal if
-the `--factory-reset` flag is provided.
-
-In automated environments you could run the command like so:
-
-```shell
-echo 'yes' | wp snicco/fortress shared cache:clear --factory-reset
-```
+ 
+Make sure that you have tested your configuration sources using
+`shared config:test` command before clearing the configuration cache.
 
 ```log
 NAME
@@ -310,12 +300,9 @@ DESCRIPTION
 
 SYNOPSIS
 
-  wp snicco/fortress shared cache:clear [--factory-reset] [--v] [--vv] [--vvv] [--interaction] [--ansi]
+  wp snicco/fortress shared cache:clear [--v] [--vv] [--vvv] [--interaction] [--ansi]
 
 OPTIONS
-
-  [--factory-reset]
-    Reset all configuration caches. Including the backup snapshots of the last configuration sources.
 
   [--v]
     Verbose output
@@ -1100,7 +1087,7 @@ to decrypt all configured `Vaults` and replace all configured `Pillars` placehol
 This command is destructure and will ask for [user confirmation](#interactivity):
 
 ```console
-$ wp snicco/fortress vnp options:unseal-all
+$ wp snicco/fortress vnp options:unseal-all --skip-plugins --skip-themes --skip-packages
 
 
  This command is potentially destructive and can not be reversed other than restoring a backup.
@@ -1108,10 +1095,13 @@ $ wp snicco/fortress vnp options:unseal-all
  > 
 ```
 
+The `--skip-plugins --skip-themes --skip-packages` is added to prevent opportunistic re-encryption if a plugin fetches a Vault/Pillar during the command.
+
+
 If you need to run this command in an automated environment, you can do like so:
 
 ```shell
-echo 'yes' | wp snicco/fortress vnp options:unseal-all
+echo 'yes' | wp snicco/fortress vnp options:unseal-all --skip-plugins --skip-themes --skip-packages
 ```
 
 This command **can not** be run

@@ -1,3 +1,17 @@
+# [1.0.0-beta.24](https://github.com/snicco/enterprise/compare/1.0.0-beta.23...1.0.0-beta.24) (2023-08-15)
+
+
+### Bug Fixes
+
+* invalidate opcache during fortress cache clear ([cd82263](https://github.com/snicco/enterprise/commit/cd82263c92878b390bc28d2d3b7460c4a7260308))
+* remove config source snapshot mechanism ([9e96503](https://github.com/snicco/enterprise/commit/9e96503fabb06bd70ace3cca2d5fa48a5a7bbb48))
+
+
+### Features
+
+* prevent installation on sites without innodb storage on wp_users ([f286b0d](https://github.com/snicco/enterprise/commit/f286b0d69881c537a6b74571edfc196bb2be7dc5)), closes [#53](https://github.com/snicco/enterprise/issues/53)
+* remove site-specific state from configuration cache invalidation ([dfe73c7](https://github.com/snicco/enterprise/commit/dfe73c7eaecdc54535e544ecc4e88ea34a0fc343))
+
 # [1.0.0-beta.23](https://github.com/snicco/enterprise/compare/1.0.0-beta.22...1.0.0-beta.23) (2023-08-09)
 
 

@@ -20,6 +20,7 @@ Snicco Fortress has the following system requirements:
 - PHP: `7.4 | 8.0 | 8.1`.
 - Non-default PHP extensions: `mbstring`.
 - WordPress: `6.0 or higher`.
+- InnoDB storage engine, enforced on the wp_users table - Highly recommended on all tables although not used by Fortress.
 
 ### Quickstart
 
@@ -29,6 +30,8 @@ of the optimal setup, take the following steps:
 1. [Download the desired version of Fortress using the GitHub UI](getting-started/01_download.md#web-ui).
 2. Install the plugin through the WordPress admin UI like any other plugin.
 3. Fortress should redirect you to the 2FA setup page after activation.
+
+> ⚠️⚠️⚠️ THIS IS FOR DEMO PURPOSES ONLY. IN PRODUCTION, FORTRESS MUST RUN AS A MUST USE PLUGIN.
 
 ### Platform/Appliance integration
 

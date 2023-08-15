@@ -3,6 +3,7 @@
 <!-- TOC -->
 * [Rational](#rational)
 * [Implementation](#implementation)
+* [Resetting a Password for another priviledged user](#resetting-a-password-for-a-different-priviledged-user)
 * [Edge cases with third-party plugins](#edge-cases-with-third-party-plugins)
 <!-- TOC -->
 
@@ -45,6 +46,19 @@ This works out of the gate for most plugins that allow password resets in the fr
 | <br>WordPress password reset<br><br>![](../../_assets/images/no-pw-reset-link.png) | <br>WooCommerce password reset<br><br>![](../../_assets/images/woocommerce-no-pw-reset.png) |
 |------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 
+
+## Resetting a password for a different priviledged user
+
+First of all, passwords can always be reset [using WP-CLI](../../wp-cli/readme.md#password-reset) for all users.
+
+However, if you are not resetting the password for your own user account, maybe because
+the user has no WP-CLI access, we recommend the following:
+
+1. Change the user's role to a non-privileged one.
+2. You'll now be able to send the user a password reset link directly on the Core user edit screen.
+3. After you have confirmation that the password is reset, restore the users' original role.
+
+This workflow is recommended because it avoids sending/providing the user his new password through potentially insecure channels.
 
 ## Edge cases with third-party plugins
 
