@@ -1,3 +1,10 @@
+# [1.0.0-beta.25](https://github.com/snicco/enterprise/compare/1.0.0-beta.24...1.0.0-beta.25) (2023-09-12)
+
+
+### Features
+
+* add deep, semantic config validation ([1806428](https://github.com/snicco/enterprise/commit/18064283dd332230e23631d654d3c4d9ad25578f)), closes [#89](https://github.com/snicco/enterprise/issues/89)
+
 # [1.0.0-beta.24](https://github.com/snicco/enterprise/compare/1.0.0-beta.23...1.0.0-beta.24) (2023-08-15)
 
 

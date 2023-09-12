@@ -229,7 +229,8 @@ Refer to the [full command reference](../wp-cli/readme.md#config-sources) for fu
 Fortress contains a CLI command to test that the current configuration sources
 can build a valid configuration cache.
 
-You should always use this command if you are editing any configuration source.
+The command performs deep semantic validation of the entire configuration, 
+and you should always use it if you are editing any configuration source.
 
 Think of it like as the `nginx -t` command that you run before `nginx reload`.
 
@@ -249,26 +250,60 @@ wp snicco/fortress shared config:test --reload-on-success
 
 Fortress will provide you with detailed troubleshooting information if any sources are invalid.
 
-Example error output:
-
-```log
-site:
-'foo' is not a valid top-level configuration option.
-The auth module does not have a 'baz' configuration option.
-```
-
-You can also output the errors as JSON by adding `--format=json`
+An example output might be:
 
 ```json
 {
-    "site": [
-        "'foo' is not a valid top-level configuration option.",
-        "The auth module does not have a 'baz' configuration option."
-    ]
+  "site": {
+    "errors": {
+      "options": {
+        "session.table_name": [
+          "The table not should not start with the db prefix 'wp_'"
+        ]
+      }
+    },
+    "warnings": {
+      "options": {
+        "theme_css_file": [
+          "The theme CSS file should be a relative URL path in order for staging/production environments to work without cache busting."
+        ],
+        "auth.max_totp_attempts_before_lockout": [
+          "Users will be locked out after 1 failed 2FA attempt. This is probably not what you want."
+        ],
+        "auth.require_2fa_for_roles.admistrator": [
+          "There is no role named 'admistrator'. It might be a typo or the role is registered dynamically by a plugin."
+        ]
+      }
+    }
+  }
 }
 ```
 
-Refer to the [full command reference](../wp-cli/readme.md#config-test) for further information.
+Warnings don't necessarily mean that your configuration is invalid but should be reviewed.
+The configuration cache can always be rebuilt if there are warnings without breaking the site.
+Errors on the other hand will prevent the configuration cache from being rebuilt.
+
+If warnings are present, Fortress will interactively ask you whether you want to continue with the rebuild.
+
+If you are running this command in an automated environment, you can also provide the `--ignore-warnings`
+flag.
+
+```shell
+wp snicco/fortress shared config:test --ignore-warnings --no-interaction
+```
+
+If `--ignore-warnings` is provided, Fortress returns a success (`0`) exit code instead of a failure (`1`).
+
+`--ignore-warnings` can also be used in combination with `--reload-on-success`.
+
+```shell
+wp snicco/fortress shared config:test \
+  --ignore-warnings \
+  --reload-on-success \
+  --no-interaction
+```
+
+Refer to the [full command reference](../wp-cli/readme.md#configtest) for further information.
 
 ## Viewing your currently cached configuration
 

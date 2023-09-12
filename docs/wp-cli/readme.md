@@ -387,22 +387,16 @@ DESCRIPTION
 
 SYNOPSIS
 
-  wp snicco/fortress shared config:test [--format=<format>] [--reload-on-success] [--v] [--vv] [--vvv] [--interaction]
-  [--ansi]
+  wp snicco/fortress shared config:test [--reload-on-success] [--ignore-warnings] [--v] [--vv]
+  [--vvv] [--interaction] [--ansi]
 
 OPTIONS
 
-  [--format=<format>]
-    The output format of possible errors
-    ---
-    default: text
-    options:
-      - text
-      - json
-    ---
-
   [--reload-on-success]
     Automatically clear internal caches and reload the configuration if it is valid.
+
+  [--ignore-warnings]
+    Ignore configuration warnings and return a success code instead of a failure.
 
   [--v]
     Verbose output
