@@ -1,3 +1,10 @@
+# [1.0.0-beta.26](https://github.com/snicco/enterprise/compare/1.0.0-beta.25...1.0.0-beta.26) (2023-09-14)
+
+
+### Bug Fixes
+
+* ensure that modules can be disabled in config sources ([b22de80](https://github.com/snicco/enterprise/commit/b22de80c08ac8d030b96a5478be616288c013785))
+
 # [1.0.0-beta.25](https://github.com/snicco/enterprise/compare/1.0.0-beta.24...1.0.0-beta.25) (2023-09-12)
 
 
