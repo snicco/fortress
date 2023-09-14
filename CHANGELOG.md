@@ -1,3 +1,15 @@
+# [1.0.0-beta.27](https://github.com/snicco/enterprise/compare/1.0.0-beta.26...1.0.0-beta.27) (2023-09-14)
+
+
+### Bug Fixes
+
+* use core's cookie_domain constant for all cookies ([43029b1](https://github.com/snicco/enterprise/commit/43029b1df80a00420c570eabfd13d377bc66c31c))
+
+
+### Features
+
+* use wpdb's base prefix instead of per-site prefix ([212bd80](https://github.com/snicco/enterprise/commit/212bd806bb97f9f59964af1a78228f690eb9a82e)), closes [/github.com/snicco/fortress/discussions/12#discussioncomment-6966981](https://github.com//github.com/snicco/fortress/discussions/12/issues/discussioncomment-6966981)
+
 # [1.0.0-beta.26](https://github.com/snicco/enterprise/compare/1.0.0-beta.25...1.0.0-beta.26) (2023-09-14)
 
 
