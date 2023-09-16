@@ -1,3 +1,11 @@
+# [1.0.0-beta.28](https://github.com/snicco/enterprise/compare/1.0.0-beta.27...1.0.0-beta.28) (2023-09-16)
+
+
+### Features
+
+* use "edit_user" instead of "manage_options" as required 2fa edit cap ([2273a3e](https://github.com/snicco/enterprise/commit/2273a3e0d24fb38a2ca76bcc0fd72a14193c76d8))
+* use dynamic admin path for baseline protected pages ([8552951](https://github.com/snicco/enterprise/commit/855295158531e411237cfb654a583dd9726028fb)), closes [#96](https://github.com/snicco/enterprise/issues/96)
+
 # [1.0.0-beta.27](https://github.com/snicco/enterprise/compare/1.0.0-beta.26...1.0.0-beta.27) (2023-09-14)
 
 

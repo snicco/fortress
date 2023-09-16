@@ -18,9 +18,10 @@
 Snicco Fortress has the following system requirements:
 
 - PHP: `7.4 | 8.0 | 8.1`.
-- Non-default PHP extensions: `mbstring`.
 - WordPress: `6.0 or higher`.
-- InnoDB storage engine, enforced on the wp_users table - Highly recommended on all tables although not used by Fortress.
+- mysqli compiled with the default MySQL Native Driver (`mysqlnd`) for PHP, **not** the legacy `libmysqlclient`.
+- `InnoDB` storage engine, enforced on the wp_users table - Highly recommended on all tables although not used by Fortress.
+- Non-default PHP extensions: `mbstring`
 
 ### Quickstart
 
