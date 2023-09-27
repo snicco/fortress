@@ -23,6 +23,8 @@
     * [table_name](#table_name)
     * [remember_cookie_name](#remember_cookie_name)
     * [protected_pages](#protected_pages)
+    * [protected_capabilities](#protected_capabilities)
+    * [non_sudo_mode_recheck_frequency](#non_sudo_mode_recheck_frequency)
     * [disable_rotation_for_ajax_like_requests_per_cap](#disable_rotation_for_ajax_like_requests_per_cap)
 * [Auth module](#auth-module)
     * [totp_secrets_table_name](#totp_secrets_table_name)
@@ -71,7 +73,7 @@ This is highly recommended when editing Fortress configuration locally:
 - [PHPStorm: How to add custom schema sources.](https://www.jetbrains.com/help/phpstorm/json.html#ws_json_schema_add_custom)
 - [Visual Studio Code: How to add custom schema sources](https://code.visualstudio.com/docs/languages/json).
 
-Below is the JSON representation of the **cached** baseline configuration of Fortress without any modification through
+Below is the JSON representation of the baseline configuration of Fortress without any modification through
 any of the supported [configuration sources](01_how_to_configure_fortress.md#configuration-sources).
 
 > In reality, Fortress does not store its cached configuration as JSON but as a PHP array, as
@@ -79,6 +81,8 @@ explained [here](01_how_to_configure_fortress.md#how-configuration-is-stored-and
 > Many of the values are created dynamically in the [fortress.php](../../config/fortress.php) config file during the first
 cache built.
 
+Note: The below configuration is for a single site installation of WordPress.
+The configuration for a multisite is slightly different.
 
 ```json
 {
@@ -121,6 +125,7 @@ cache built.
       "/wp-admin/profile.php",
       "/wp-admin/update.php",
       "/wp-admin/options-*",
+      "/wp-admin/options.php",
       "/wp-admin/authorize-application.php",
       "/wp-admin/tools.php",
       "/wp-admin/import.php",
@@ -132,6 +137,46 @@ cache built.
       "/wp-admin/plugin-editor.php",
       "/snicco-fortress/auth/totp/manage*"
     ],
+    "protected_capabilities": [
+      "activate_plugins",
+      "delete_plugins",
+      "delete_themes",
+      "delete_users",
+      "edit_dashboard",
+      "edit_files",
+      "edit_plugins",
+      "edit_theme_options",
+      "edit_themes",
+      "edit_users",
+      "export",
+      "import",
+      "install_plugins",
+      "install_themes",
+      "manage_options",
+      "promote_users",
+      "remove_users",
+      "list_users",
+      "create_users",
+      "switch_themes",
+      "unfiltered_html",
+      "unfiltered_upload",
+      "update_core",
+      "update_plugins",
+      "update_themes",
+      "manage_categories",
+      "delete_pages",
+      "delete_private_pages",
+      "delete_published_pages",
+      "delete_others_pages",
+      "delete_posts",
+      "delete_private_posts",
+      "delete_published_posts",
+      "delete_others_posts",
+      "edit_comment",
+      "view_site_health_checks",
+      "install_languages"
+    ],
+    "non_sudo_mode_recheck_frequency": 10,
     "disable_rotation_for_ajax_like_requests_per_cap": []
   },
   "auth": {
@@ -485,6 +530,97 @@ The following configuration would prevent users whose sessions are not in sudo m
     }
 }
 ```
+
+### protected_capabilities
+
+- Key: `protected_capabilities`
+- Type: `string[]`
+- Default:
+    ```json 
+    {
+      "session": {
+        "protected_capabilities": [
+          "activate_plugins",
+          "delete_plugins",
+          "delete_themes",
+          "delete_users",
+          "edit_dashboard",
+          "edit_files",
+          "edit_plugins",
+          "edit_theme_options",
+          "edit_themes",
+          "edit_users",
+          "export",
+          "import",
+          "install_plugins",
+          "install_themes",
+          "manage_options",
+          "promote_users",
+          "remove_users",
+          "list_users",
+          "create_users",
+          "switch_themes",
+          "unfiltered_html",
+          "unfiltered_upload",
+          "update_core",
+          "update_plugins",
+          "update_themes",
+          "manage_categories",
+          "delete_pages",
+          "delete_private_pages",
+          "delete_published_pages",
+          "delete_others_pages",
+          "delete_posts",
+          "delete_private_posts",
+          "delete_published_posts",
+          "delete_others_posts",
+          "edit_comment",
+          "view_site_health_checks",
+          "install_languages"
+       ]
+      }
+  }
+    ```
+
+The `protected_capabilities` option specifies capabilities that a user can only "has" if their session is still in [sudo mode](../modules/session/sudo-mode.md).
+
+The following configuration would only protect the `manage_options` capability.
+
+```json
+{
+    "session": {
+        "protected_capabilities": [
+            "manage_options"
+        ]
+    }
+}
+```
+
+The following configuration would make all capabilities accessible all the time, even if a session is not in [sudo mode](../modules/session/sudo-mode.md).
+
+```json
+{
+    "session": {
+        "protected_capabilities": []
+    }
+}
+```
+
+### non_sudo_mode_recheck_frequency
+
+- Key: `non_sudo_mode_recheck_frequency`
+- Type: `positive-integer`
+- Default: `10`
+
+The `non_sudo_mode_recheck_frequency` option determines how often Fortress checks if a user's session has re-entered the [sudo mode](../modules/session/sudo-mode.md).
+
+This timeout is only relevant if the user is either about to cross the threshold of non being in sudo mode anymore, 
+or has crossed the sudo timeout already.
+
+A value of `10` means that Fortress would check every ten **seconds** if the user has confirmed his credentials
+AFTER his session had already crossed the sudo timeout.
+
+No checks are made if the user is still in sudo mode.
 
 ### disable_rotation_for_ajax_like_requests_per_cap
 

@@ -237,7 +237,7 @@ You may know this from eCommerce sites that will keep you logged in for a very l
 
 This concept is [explained on a separate documentation page in great detail](sudo-mode.md).
 
-The default sudo timeout in Fortress is '10 minutes`.
+The default sudo timeout in Fortress is `10 minutes`.
 
 ### Use-case
 
@@ -246,7 +246,7 @@ The sudo mode timeout complements the [absolute timeout](#the-absolute-timeout) 
 Example:
 
 - A user logs in at 10:00, and the sudo mode timeout is `5 minutes`. The absolute and idle timeout can be set higher.
-- A malware steals the cookie from the user's computer at `10:01`.
+- Malware steals the cookie from the user's computer at `10:01`.
 - The attacker tries to use the stolen cookie at `10:07` and can log in. 
 - However, the attacker can't perform sensitive actions like uploading new plugins, adding users, etc., since they don't know the impersonated user's password.
 

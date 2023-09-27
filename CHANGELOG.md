@@ -1,3 +1,14 @@
+# [1.0.0-beta.29](https://github.com/snicco/enterprise/compare/1.0.0-beta.28...1.0.0-beta.29) (2023-09-27)
+
+
+### Features
+
+* add hidden page wp-admin/options.php as protected ([e8ebd20](https://github.com/snicco/enterprise/commit/e8ebd20315fc895104cabfcde0a23d1ab0cc70be))
+* add multisite specific protected pages ([7b80892](https://github.com/snicco/enterprise/commit/7b808920d15d7eaaa1880120acec8273f48c76d2))
+* add sudo mode compatability for wp application passwords and third-party auth ([c2fd7ac](https://github.com/snicco/enterprise/commit/c2fd7ac7bc24d2286b8c4945c60ff88c531e0530)), closes [#87](https://github.com/snicco/enterprise/issues/87)
+* pipe admin request through fortress on wp_loaded instead of admin_init ([937af1b](https://github.com/snicco/enterprise/commit/937af1bacd68426f261b846adadd3d8a0f02a63d))
+* restrict capabilities for non sudo mode sessions ([4fbe453](https://github.com/snicco/enterprise/commit/4fbe4539b41add0630bbd74338069cac0c657051)), closes [#100](https://github.com/snicco/enterprise/issues/100)
+
 # [1.0.0-beta.28](https://github.com/snicco/enterprise/compare/1.0.0-beta.27...1.0.0-beta.28) (2023-09-16)
 
 

@@ -1,103 +1,283 @@
 # The Fortress sudo mode
 
-<!-- TOC -->
-* [Introduction](#introduction)
-* [How does it work in practice?](#how-does-it-work-in-practice)
-    * [For a session in sudo mode](#for-a-session-in-sudo-mode)
-    * [For a non-sudo mode session](#for-a-non-sudo-mode-session)
-* [Protected pages](#protected-pages)
-* [Testing the sudo mode](#testing-the-sudo-mode)
-* [Skipping the sudo mode check](#skipping-the-sudo-mode-checks)
-  * [Skipping the sudo mode check for request from ManageWP](#skipping-the-sudo-mode-check-for-request-from-managewp)    
-  * [Skipping the sudo more for application passwords](#skipping-the-sudo-mode-checks-for-application-passwords)
+  * [Introduction](#introduction)
+  * [How the Sudo Mode Works in Practice](#how-the-sudo-mode-works-in-practice)
+    * [1. Session in Sudo Mode](#1-session-in-sudo-mode)
+    * [2. Approaching Sudo Mode Expiry](#2-approaching-sudo-mode-expiry)
+    * [3. Reduced Permissions — A Session Outside Sudo Mode](#3-reduced-permissions--a-session-outside-sudo-mode)
+  * [Protected Capabilities](#protected-capabilities)
+    * [Configuring Protected Capabilities](#configuring-protected-capabilities)
+  * [Protected Pages](#protected-pages)
+    * [Configuring Protected Pages](#configuring-protected-pages)
+      * [Wildcards](#wildcards)
+  * [Distinguishing Between Protected Capabilities & Protected Pages](#distinguishing-between-protected-capabilities--protected-pages)
+    * [The Nuances](#the-nuances)
+    * [Visualizing the Difference](#visualizing-the-difference)
+  * [Testing the sudo mode](#testing-the-sudo-mode)
 <!-- TOC -->
 
 ## Introduction
 
-> Before you continue reading, make sure to familiarize yourself with the [session managment](session-managment-and-security.md) documentation to see how the sudo mode works in the big picture.
+> Before diving deeper, it's essential to have a grasp of the [session management](session-managment-and-security.md)
+> principles.
+> This provides context on how the sudo mode fits within the broader framework.
 
-The Fortress sudo mode, in analogy to the Linux [sudo](https://www.sudo.ws/) command, defines a period in which Fortress will assign elevated privileges to a user's session.
+The Fortress sudo mode mirrors the concept of the Linux [`sudo`](https://www.sudo.ws/) command.
+Essentially, after a user logs in, there's a
+specific period where the user's session operates in a high-privileged state.
 
-As a rule of thumb, a sudo mode session is equal to a "normal" user session when Fortress is not installed.
+This heightened session privilege lasts for a [set duration](session-managment-and-security.md#configuration-3).
+Once this [sudo timeout](session-managment-and-security.md#the-sudo-mode-timeout) expires, Fortress transitions the
+user's session from a high-privileged to a low-privileged state.
 
-A particular session is only in sudo mode for a [configurable duration](session-managment-and-security.md#configuration-3) after logging in (through any means) for the first time.
+This means certain sensitive actions become restricted
+unless the user re-confirms their credentials.
 
-After the [sudo timeout](session-managment-and-security.md#the-sudo-mode-timeout) has passed, Fortress will downgrade the user's session to a low-privileged one.
+The essence of this mechanism relies on two main components:
 
-## How does it work in practice?
+- protected capabilities
+- and protected pages.
 
-### For a session in sudo mode
+We'll delve deeper into these shortly.
 
-Simple. There is no difference. A user can use the site in the same manner as if Fortress wasn't installed.
+> Note: It's crucial to understand that the user remains logged in the entire time.
+> Only specific sensitive actions are limited, while non-sensitive tasks continue uninterrupted.
 
-### For a non-sudo mode session
+## How the Sudo Mode Works in Practice
 
-A user will only notice that Fortress downgraded his session privileges once they try to access one of the configured [protected pages](#protected-pages).
+### 1. Session in Sudo Mode
 
-At that point, Fortress will intercept that request and redirect the user to a page that asks them to confirm their password.
+Upon logging in, the user's session instantly activates the sudo mode. In this state:
 
-If the user can provide his password, Fortress will reset the sudo timeout and redirect the user to their intended location.
+- The user has full capabilities, allowing them to perform any action that they normally could on the site.
+- This unrestricted access persists for the sudo timeout's duration, which is 15
+  minutes [by default](session-managment-and-security.md#configuration-3).
+- Visually, the admin dashboard appears as usual.
 
-| The user tries to access the sensitive plugins.php page.<br><br>![Confirm access](../../_assets/images/session/confirm-access.png) | On success, Fortress redirects the user back.<br><br>![Plugins page success](../../_assets/images/session/plugins.png) |
-|------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+![Screenshot of the admin dashboard with a session in sudo mode](../../_assets/images/session/session-in-sudo.png)
 
-Fortress will only intercept requests to protected pages for non-sudo mode sessions, while all other pages on the site can still be accessed.
+### 2. Approaching Sudo Mode Expiry
 
-## Protected pages
+As this privileged mode approaches its conclusion:
 
-A protected page can only be accessed by a user whose session is in sudo mode.
+- A lightweight JS script added by Fortress to the admin footer alerts the user when
+  only 1 minute remains before sudo mode expiration.
 
-By default, Fortress considers the following pages to be protected:
+![Screenshot of the admin dashboard with the sudo mode about to expire](../../_assets/images/session/sudo-about-to-expire.png)
+
+- Rather than relying on a static countdown, Fortress fetches timeout details from the server via AJAX, updating every
+  10 seconds.
+  Adjust this frequency through the
+  [`non_sudo_mode_recheck_frequency`](../../configuration/02_configuration_reference.md#non_sudo_mode_recheck_frequency)
+  option.
+
+**Note**: Fortress initiates these checks only when less than 60 seconds remain in the sudo mode.
+
+![Screenshot of the admin dashboard where sudo mode is being rechecked](../../_assets/images/session/rechecking-permissions.png)
+
+- At any point, users can select the alert in the admin bar, guiding them to a new tab. Here, they can verify their
+  identity and renew the sudo timer.
+
+![Screenshot of the confirm access page when a user clicks the admin bar link](../../_assets/images/session/confirm-sudo-mode-voluntary.png)
+
+If a user doesn't act, the sudo mode ends, and permissions decrease.
+
+### 3. Reduced Permissions — A Session Outside Sudo Mode
+
+If users don't re-authenticate prior to the sudo timeout:
+
+- The session's limited permission state is highlighted by Fortress,
+  which continues to monitor and update the sudo mode status.
+
+![Screenshot of the admin area with restricted permissions](../../_assets/images/session/sudo-mode-reduced-permissions.png)
+
+- With reduced permissions, users can't execute highly sensitive tasks.
+  This restriction is implemented by filtering out all set [protected capabilities](#protected-capabilities) at runtime.
+- Fortress employs official WordPress APIs for these operations, ensuring seamless functionality.
+
+Consider a scenario where a user accesses the post overview page:
+
+- While editing and viewing remain available, specific functions, such as bulk post deletion (
+  a [protected capability](#protected-capabilities)), are disabled.
+- WordPress automatically removes certain functionalities and menu items, like the "Settings" and "Plugins" menu items
+  are no longer visible.
+
+![Screenshot of the WordPress post edit page](../../_assets/images/session/post-edit-permissions.png)
+
+If a user, despite the missing "Settings" menu item tries accessing `/wp-admin/options-general.php` -
+a [protected page](#protected-pages) - Fortress intercepts and redirects them:
+
+![Screenshot of the Confirm Access](../../_assets/images/session/confirm-access.png)
+
+Providing correct credentials resets the sudo timer, and the user gets redirected to their intended destination.
+
+![Screenshot of the WordPress settings page after confirm access redirect](../../_assets/images/session/settings-access.png)
+
+## Protected Capabilities
+
+Fortress recognizes the following capabilities as protected. As a result, only users in sudo mode can execute them.
+
+It's worth noting that most of these capabilities are typically reserved for administrators.
+Hence, **everyday users or content editors will largely remain unaffected by these restrictions**.
+
+| Capability                | Reason                                                                                                 |
+|---------------------------|--------------------------------------------------------------------------------------------------------|
+| `activate_plugins`        | Allows activation of plugins. Restricted to prevent unwanted or malicious plugins.                     |
+| `delete_plugins`          | Allows deletion of plugins. Restricted to safeguard essential plugins.                                 |
+| `delete_themes`           | Allows theme deletion. Restricted to protect the site's appearance and functionality.                  |
+| `delete_users`            | Grants user deletion privileges. Restricted to prevent unauthorized user removal.                      |
+| `edit_dashboard`          | Provides access to edit the dashboard. Restricted to maintain dashboard integrity.                     |
+| `edit_files`              | Permits direct file editing. Restricted to prevent unwanted file modifications.                        |
+| `edit_plugins`            | Allows plugin file edits. Restricted to prevent plugin tampering or injection.                         |
+| `edit_theme_options`      | Grants theme option modifications. Restricted to maintain site appearance and settings.                |
+| `edit_themes`             | Grants access to edit theme files. Restricted to prevent tampering with theme.                         |
+| `edit_users`              | Allows editing user profiles. Restricted to prevent unauthorized user profile changes.                 |
+| `export`                  | Permits data export. Restricted to prevent unauthorized data exports.                                  |
+| `import`                  | Grants data import capabilities. Restricted to avoid malicious or unwanted data imports.               |
+| `install_plugins`         | Grants plugin installation. Restricted to avoid malicious plugin installations.                        |
+| `install_themes`          | Allows theme installations. Restricted to safeguard site appearance.                                   |
+| `manage_options`          | Provides access to various settings. Restricted to preserve site configurations.                       |
+| `promote_users`           | Allows user role changes. Restricted to maintain role hierarchies.                                     |
+| `remove_users`            | Grants user removal capabilities. Restricted to prevent unauthorized removals.                         |
+| `list_users`              | Permits viewing user lists. Restricted to protect user privacy.                                        |
+| `create_users`            | Allows user creation. Restricted to prevent unauthorized user additions.                               |
+| `switch_themes`           | Grants theme switching. Restricted to maintain site's appearance and user experience.                  |
+| `unfiltered_html`         | Allows posting HTML without filtering. Restricted to prevent XSS attacks.                              |
+| `unfiltered_upload`       | Permits uploads without filtering. Restricted to avoid uploads of JS and HTML files.                   |
+| `update_core`             | Grants WordPress core update. Restricted to ensure stable updates and site integrity.                  |
+| `update_plugins`          | Allows plugin updates. Restricted to avoid compatibility or security issues.                           |
+| `update_themes`           | Permits theme updates. Restricted to maintain site appearance and stability.                           |
+| `manage_categories`       | Allows category management. Restricted to maintain content taxonomy.                                   |
+| `delete_pages`            | Grants page deletion. Restricted to prevent loss of critical site pages.                               |
+| `delete_private_pages`    | Permits deletion of private pages. Restricted to maintain content integrity.                           |
+| `delete_published_pages`  | Allows deleting published pages. Restricted to preserve site structure and content.                    |
+| `delete_others_pages`     | Grants deletion of pages by other users. Restricted to maintain content consistency.                   |
+| `delete_posts`            | Grants post deletion. Restricted to maintain content consistency.                                      |
+| `delete_private_posts`    | Permits deletion of private posts. Restricted to maintain content integrity.                           |
+| `delete_published_posts`  | Allows deleting published posts. Restricted to maintain content consistency.                           |
+| `delete_others_posts`     | Grants deletion of posts by other users. Restricted to maintain content quality and consistency.       |
+| `edit_comment`            | Provides access to edit and delete comments. Restricted to prevent unauthorized comment modifications. |
+| `view_site_health_checks` | Grants access to site health data. Restricted to protect sensitive site info.                          |
+| `install_languages`       | Allows language installations. Restricted to maintain site language consistency.                       |
+
+On a **WordPress Multisite**, additional capabilities are protected:
+
+| Capability               | Reason                                                                                                             |
+|--------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `create_sites`           | Allows creating new sites within the network. Restricted to control the growth and structure of the network.       |
+| `delete_sites`           | Grants the ability to delete sites. Restricted to prevent unwanted removal of sites within the network.            |
+| `manage_network`         | Provides overall network management access. Restricted to maintain network settings and integrity.                 |
+| `manage_sites`           | Allows managing sites within the network. Restricted to ensure site consistency within the network.                |
+| `manage_network_users`   | Grants ability to manage network-wide users. Restricted to protect user roles and data across the network.         |
+| `manage_network_plugins` | Provides access to manage plugins network-wide. Restricted to maintain consistent plugin use across sites.         |
+| `manage_network_themes`  | Allows managing themes across the network. Restricted to ensure a consistent look and feel for all sites.          |
+| `manage_network_options` | Grants access to manage network-wide options. Restricted to maintain consistent settings across sites.             |
+| `upgrade_network`        | Allows network-wide upgrades. Restricted to ensure stable upgrades and maintain site integrity across the network. |
+| `setup_network`          | Provides access to set up the network initially. Restricted to maintain a consistent initial network setup.        |
+
+### Configuring Protected Capabilities
+
+You have two methods at your disposal to alter the list of protected capabilities:
+
+1. **Custom List:** Begin with a blank slate by defining your unique list of protected capabilities. You can achieve
+   this using the
+   [`protected_capabilities`](../../configuration/02_configuration_reference.md#protected_capabilities) option.<br>
+   ⚠️ Be cautious: Utilizing this method will overwrite Fortress's default protected capabilities!
+2. **Using WordPress Hooks:** This method allows you to add or remove specific capabilities using WordPress hooks.
 
 ```php
-$protected_pages = [
-    // Updates
-    '/wp-admin/update-core.php',
+<?php
+
+/*
+* Plugin Name: Customize Fortress's Protected Capabilities
+*/
+
+use Snicco\Enterprise\Fortress\Session\Infrastructure\Event\DeterminingProtectedCapabilities;
+
+add_action(DeterminingProtectedCapabilities::class, function (DeterminingProtectedCapabilities $event) :void {
     
-    // Appearance
-    '/wp-admin/themes.php',
-    '/wp-admin/theme-install.php',
-    
-    // Plugins,
-    '/wp-admin/plugins.php',
-    '/wp-admin/plugin-install.php',
-    
-    // Users
-    '/wp-admin/users.php',
-    '/wp-admin/user-new.php',
-    '/wp-admin/profile.php',
-    
-    // Update
-    '/wp-admin/update.php',
-    
-    // Options > *
-    '/wp-admin/options-*',
-    
-    // Authorize application password.
-    'wp-admin/authorize-application.php',
-    
-    // Tools > *
-    '/wp-admin/tools.php',
-    '/wp-admin/import.php',
-    '/wp-admin/export.php',
-    '/wp-admin/site-health.php',
-    '/wp-admin/export-personal-data.php',
-    '/wp-admin/erase-personal-data.php',
-    '/wp-admin/theme-editor.php',
-    '/wp-admin/plugin-editor.php',
-];
+    // Add a single capability.
+    $event->addProtectedCapability('my_custom_capability');
+    // Add multiple capabilities.
+    $event->addProtectedCapability('my_custom_capability_1', 'my_custom_capability_2');
+   
+   // Remove a single capability.
+    $event->removeProtectedCapability('my_custom_capability');
+    // Remove multiple capabilities.
+    $event->removeProtectedCapability('my_custom_capability_1', 'my_custom_capability_2');
+}
 ```
 
-You can use the [`protected_pages` option](../../configuration/02_configuration_reference.md#protected_pages) to define your list of protected pages.
+**Key Point:** Ensure your hook callback is initialized before the `plugins_loaded` hook gets triggered.
 
-**Important:** This will completely overwrite the default protected pages of Fortress!
+To incorporate the callback, you can either place it in a custom plugin or within a must-use plugin. However, **don't
+attempt to add it to the theme's functions.php** file — it's too late in the process and will not function correctly.
 
-If you want to use all of Fortress's default protected pages AND some custom ones, you need to either:
+## Protected Pages
 
-- copy the default and add your own, or
-- use the runtime PHP hooks to customize protected pages.
+Within Fortress, a "protected page" can solely be accessed by users whose session is in "sudo mode."
+Those operating in non-sudo mode are redirected to the "Confirm Access" page.
+
+Protected pages are determined by inspecting the URL path of the current request.
+
+By default, these are the pages Fortress marks as protected.
+It's important to note that the majority of these pages are
+primarily accessible to administrators:
+
+| Path                                 | Functionality & Usage                                                                                       |
+|--------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| `/wp-admin/update-core.php`          | Allows updating of WordPress core, plugins, and themes.                                                     |
+| `/wp-admin/themes.php`               | Manages installed themes and customize the active theme.                                                    |
+| `/wp-admin/theme-install.php`        | Enables installation of new themes from the WordPress repository or upload.                                 |
+| `/wp-admin/plugins.php`              | Manages installed plugins (activate/deactivate/delete).                                                     |
+| `/wp-admin/plugin-install.php`       | Enables installation of new plugins from the WordPress repository or upload.                                |
+| `/wp-admin/users.php`                | Manages site users, roles, and their details.                                                               |
+| `/wp-admin/user-new.php`             | Adds new users to the site.                                                                                 |
+| `/wp-admin/profile.php`              | Allows users to edit their own profile and settings.                                                        |
+| `/wp-admin/update.php`               | Processes updates for plugins, themes, and the WordPress core.                                              |
+| `/wp-admin/options-*.php`            | Provides various site-wide settings and configurations.                                                     |
+| `/wp-admin/options.php`              | Allows viewing confidential site settings.                                                                  |
+| `wp-admin/authorize-application.php` | Authorizes external applications to connect to the site.                                                    |
+| `/wp-admin/tools.php`                | Offers tools such as import/export, site health, and data erasure.                                          |
+| `/wp-admin/import.php`               | Imports content from other WordPress installations or platforms.                                            |
+| `/wp-admin/export.php`               | Exports site content in a WordPress compatible format.                                                      |
+| `/wp-admin/site-health.php`          | Checks site health and provides information about server configurations, performance, and potential issues. |
+| `/wp-admin/export-personal-data.php` | Exports personal data of a user for GDPR compliance.                                                        |
+| `/wp-admin/erase-personal-data.php`  | Erases personal data of a user upon request.                                                                |
+| `/wp-admin/theme-editor.php`         | Provides a code editor to modify theme files directly.                                                      |
+| `/wp-admin/plugin-editor.php`        | Provides a code editor to modify plugin files directly.                                                     |
+
+For those utilizing **WordPress Multisite**, additional protected pages come into play:
+
+| Page                               | Functionality & Usage                                                                      |
+|------------------------------------|--------------------------------------------------------------------------------------------|
+| `/wp-admin/network.php`            | Displays the main dashboard of the Network Admin for multisite installations.              |
+| `/wp-admin/ms-admin.php`           | Deprecated network admin file; rarely used in recent versions.                             |
+| `/wp-admin/ms-delete-site.php`     | Allows for the deletion of a subsite within the multisite network.                         |
+| `/wp-admin/ms-edit.php`            | Allows for the editing of a particular site's settings within the multisite network.       |
+| `/wp-admin/ms-options.php`         | Manages network-wide settings for the multisite installation.                              |
+| `/wp-admin/ms-sites.php`           | Manages all the sites within the multisite network.                                        |
+| `/wp-admin/ms-themes.php`          | Controls the themes that are available for subsites within the multisite network.          |
+| `/wp-admin/ms-upgrade-network.php` | Handles the upgrading process for the entire network when WordPress core updates are made. |
+| `/wp-admin/network/*`              | Represents a wildcard for various other network administration tasks and settings.         |
+
+### Configuring Protected Pages
+
+You have two methods at your disposal to alter the list of protected capabilities:
+
+1. **Custom List:** Begin with a blank slate by defining your unique list of protected pages.
+   You can achieve this using the
+   [`protected_pages`](../../configuration/02_configuration_reference.md#protected_pages) option.<br>
+   ⚠️ Be cautious: Utilizing this method will overwrite Fortress's default protected pages!
+2. **Using WordPress Hooks:** This method allows you to add specific pages using WordPress hooks.
 
 ```php
+<?php
+
+/*
+* Plugin Name: Customize Fortress's Protected Pages
+*/
+
 use Snicco\Enterprise\Fortress\Session\Infrastructure\Event\ConfirmingSudoMode;
 
 add_action(ConfirmingSudoMode::class, function (ConfirmingSudoMode $event) :void {
@@ -108,181 +288,69 @@ add_action(ConfirmingSudoMode::class, function (ConfirmingSudoMode $event) :void
 })
 ```
 
-The `*` character can be used as a wildcard.
+#### Wildcards
 
-Examples:
+In defining paths, the * symbol acts as a wildcard, offering broad match possibilities.
 
-`/wp-admin/*` will protect the entire WordPress admin area.
-- `/post-*` will match `/post-1`, `/post-2` and `/post-1/child/sub-child`.
+For instance:
+
+- `/wp-admin/*` will match the entire WordPress admin domain.
+- `/post-*` matches paths like `/post-1`, `/post-2`, and even `/post-1/child/sub-child`.
+
+## Distinguishing Between Protected Capabilities & Protected Pages
+
+At a glance, both "Protected Capabilities" and "Protected Pages" might seem similar, but they serve distinct purposes:
+the former revolves around security, while the latter enhances usability.
+
+### The Nuances
+
+**1. Protected Capabilities:**
+
+- These primarily ensure security by dictating who can perform certain actions.
+- If you solely use protected capabilities without protected pages, users might encounter not so pretty error displays.
+
+**2. Protected Pages:**
+
+- These focus on user experience by ensuring users don't stumble upon confusing (WordPress) error pages.
+- Fortress redirects users to the "Confirm Access" page, where they can re-authenticate and renew their sudo mode.
+
+### Visualizing the Difference
+
+**1. Standard WordPress Error:**
+
+- By default, if WordPress detects a missing permission, it shows the "wp_die" page.
+
+![Screenshot of the default wp_die page](../../_assets/images/session/wp_die.png)
+
+- To put it bluntly, it's not the most pleasant user experience.
+
+**2. Fortress's Enhanced UX:**
+
+- In contrast, Fortress redirects users to a more approachable "Confirm Access" page.
+
+![Screenshot of the confirm access page](../../_assets/images/session/confirm-access.png)
+
+**3. Edge Case:**
+
+- If a user tries accessing a page that requires a protected capability but isn't a protected page, Fortress detects this
+  and enhances the default wp_die page with a link to the "Confirm Access" page.
+
+![Screenshot of the Fortress wp_die page](../../_assets/images/session/wp_die_ux.png)
+
 
 ## Testing the sudo mode
 
-It is cumbersome to test that the correct pages on your site are protected because you will have to wait for the sudo timeout to pass.
+It is cumbersome to test that your sudo mode configuration works as expected
+since it has a time-based component and requires you to wait out the sudo timeout.
 
-For this reason, Fortress includes a WP-CLI command that will toggle the sudo mode status of a user's most recently created session.
+For this reason, Fortress includes a WP-CLI command that will toggle the sudo mode status of a user's most recently
+created session.
 
 ```shell
-wp snicco/fortress session toggle-sudo {username}
+wp snicco/fortress session toggle-sudo <user_id>
 ```
 
 Refer to the [complete command reference here](../../wp-cli/readme.md#toggle-sudo).
-
-## Skipping the sudo mode checks
-
-You might have plugins on your site that act on behalf of a WordPress user.
-This is typically only the case when you have any third-party application performing requests to your WordPress site.
-
-Common examples are management tools like MainWP/ManageWP.
-
-If you experience any issues it's likely because they try act on behalf of WordPress user even-though the user is not making actual request.
-(Concretely, it means that they set the current WordPress user, without there being a session token.)
-
-This means that Fortress can't find a session token to check the sudo mode.
-
-> The sudo mode is always checked per user session, not per user.
-
-As always, Fortress will error on the site of caution and abort the request as a missing 
-session token might very well indicate a misconfiguration of your site. 
-
-In any case you can skip the sudo checks at runtime with the filter `ShouldSudoModeCheckBeSkipped`.
-
-Let's look at some examples:
-
-### Skipping the sudo mode check for request from ManageWP
-
-```php
-// Put this into a custom must-use plugin ideally.
-// A normal plugin or functions.php is also fine.
-
-use Snicco\Enterprise\Fortress\Session\Infrastructure\Event\ShouldSudoModeCheckBeSkipped;
-
-add_action(ShouldSudoModeCheckBeSkipped::class, function (ShouldSudoModeCheckBeSkipped $event) {
-     
-    // Manage WP IPs, taken from: https://managewp.com/troubleshooting/general/managewp-ips-can-white-list
-    $ips = [
-        '54.191.137.17',
-        '34.211.180.66',
-        '54.70.65.107',
-        '34.210.224.7',
-        '52.41.5.108',
-        '52.35.72.129',
-        '35.162.254.253',
-        '52.11.12.231',
-        '52.11.29.70',
-        '52.11.54.161',
-        '52.24.142.159',
-        '52.25.191.255',
-        '52.34.126.117',
-        '52.34.254.47',
-        '52.35.82.99',
-        '52.36.28.80',
-        '52.39.177.152',
-        '52.41.237.12',
-        '52.43.13.71',
-        '52.43.76.224',
-        '52.88.96.110',
-        '52.89.155.51',
-        '54.187.92.57',
-        '54.191.32.65',
-        '54.191.67.23',
-        '54.191.80.119',
-        '54.191.135.209',
-        '54.191.136.176',
-        '54.191.148.85',
-        '54.191.149.8',
-        '52.26.122.21',
-        '52.24.187.29',
-        '52.89.85.107',
-        '54.186.128.167',
-        '54.191.40.136',
-        '52.88.119.122',
-        '52.89.94.121',
-        '52.25.116.116',
-        '52.88.215.225',
-        '54.186.143.184',
-        '52.88.197.180',
-        '52.27.171.126',
-        '34.211.178.241',
-        '52.24.232.158',
-        '52.26.187.210',
-        '52.42.189.119',
-        '54.186.244.128',
-        '54.71.54.102',
-        '34.210.35.214',
-        '34.213.77.188',
-        '34.218.121.176',
-        '52.10.190.191',
-        '52.10.225.96',
-        '52.11.187.168',
-        '52.25.139.76',
-        '52.43.127.200',
-        '54.191.108.9',
-        '54.70.201.228',
-        '44.224.174.169',
-        '52.32.57.81',
-        '44.225.177.160',
-        '34.223.186.249',
-        '44.224.135.238',
-        '44.226.111.14',
-        '44.225.203.104',
-        '44.226.100.122',
-        '44.224.250.144',
-        '44.225.118.211',
-        '54.189.93.69',
-        '44.231.184.112',
-        '44.238.10.27',
-        '54.185.116.30',
-        '44.238.58.95',
-        '52.13.23.154',
-        '54.149.16.35',
-        '44.226.97.20',
-        '54.244.242.144',
-        '44.238.67.135',
-        '44.235.15.76',
-        '54.214.47.164',
-        '34.214.48.135',
-        '54.184.234.227',
-        '44.238.241.95',
-        '52.37.217.170',
-    ];
-
-    if(in_array($_SERVER['REMOTE_ADDR'], $ips, true)){
-        $event->skip_for_current_request = true;
-    }
-    
-});
-```
-
-The action must be added before the `admin_init` hook for admin requests, or before the `wp_loaded` hook for other requests.
-
-### Skipping the sudo mode checks for application passwords
-
-If your site uses application passwords you might also need to skip sudo mode checks.
-
-To achieve this you can make use of the [application_password_did_authenticate](https://developer.wordpress.org/reference/hooks/application_password_did_authenticate/) hook that WordPress fires after a request was authenticated successfully with an application password.
-
-```php
-// Put this into a custom must-use plugin ideally.
-// A normal plugin or functions.php is also fine.
-
-use Snicco\Enterprise\Fortress\Session\Infrastructure\Event\ShouldSudoModeCheckBeSkipped;
-
-add_action('application_password_did_authenticate', function (WP_User $user) :void {
-
-    $user_id = $user->ID;
-        
-    add_action(ShouldSudoModeCheckBeSkipped::class, function (ShouldSudoModeCheckBeSkipped $event) use($user_id){
-         
-        if ($user_id === $event->user_id){
-            $event->skip_for_current_request = true;
-        }
-        
-    });
-        
-}, 10, 1);
-```
-
-You need to define this before the `init` hook fires.
 
 ---
 
