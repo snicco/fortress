@@ -122,6 +122,7 @@ Hence, **everyday users or content editors will largely remain unaffected by the
 
 | Capability                | Reason                                                                                                 |
 |---------------------------|--------------------------------------------------------------------------------------------------------|
+| `administrator`           | Wrongfully used by many plugins to check if a user is an admin.                                        |
 | `activate_plugins`        | Allows activation of plugins. Restricted to prevent unwanted or malicious plugins.                     |
 | `delete_plugins`          | Allows deletion of plugins. Restricted to safeguard essential plugins.                                 |
 | `delete_themes`           | Allows theme deletion. Restricted to protect the site's appearance and functionality.                  |

@@ -1,3 +1,11 @@
+# [1.0.0-beta.30](https://github.com/snicco/enterprise/compare/1.0.0-beta.29...1.0.0-beta.30) (2023-10-06)
+
+
+### Features
+
+* add literal 'administrator' capability as protected ([b81f66c](https://github.com/snicco/enterprise/commit/b81f66c7d5442eab3b9afd82f46d4a1c2472239c))
+* vaults&pillars compat for wp6.4 ([c11996d](https://github.com/snicco/enterprise/commit/c11996df13be6b5d7c5f4b3bcdd69508c74cd705))
+
 # [1.0.0-beta.29](https://github.com/snicco/enterprise/compare/1.0.0-beta.28...1.0.0-beta.29) (2023-09-27)
 
 

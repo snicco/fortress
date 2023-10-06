@@ -138,6 +138,7 @@ The configuration for a multisite is slightly different.
       "/snicco-fortress/auth/totp/manage*"
     ],
     "protected_capabilities": [
+      "administrator",
       "activate_plugins",
       "delete_plugins",
       "delete_themes",
@@ -540,6 +541,7 @@ The following configuration would prevent users whose sessions are not in sudo m
     {
       "session": {
         "protected_capabilities": [
+          "administrator",
           "activate_plugins",
           "delete_plugins",
           "delete_themes",
