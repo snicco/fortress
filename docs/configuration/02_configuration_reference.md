@@ -159,7 +159,6 @@ The configuration for a multisite is slightly different.
       "list_users",
       "create_users",
       "switch_themes",
-      "unfiltered_html",
       "unfiltered_upload",
       "update_core",
       "update_plugins",

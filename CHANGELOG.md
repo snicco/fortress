@@ -1,3 +1,10 @@
+# [1.0.0-beta.31](https://github.com/snicco/enterprise/compare/1.0.0-beta.30...1.0.0-beta.31) (2023-10-06)
+
+
+### Bug Fixes
+
+* don't sudo protect unfiltered_html by default ([1d7e90f](https://github.com/snicco/enterprise/commit/1d7e90f46913780685496d64a0f34c01af2a154d))
+
 # [1.0.0-beta.30](https://github.com/snicco/enterprise/compare/1.0.0-beta.29...1.0.0-beta.30) (2023-10-06)
 
 

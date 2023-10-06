@@ -7,6 +7,7 @@
     * [3. Reduced Permissions — A Session Outside Sudo Mode](#3-reduced-permissions--a-session-outside-sudo-mode)
   * [Protected Capabilities](#protected-capabilities)
     * [Configuring Protected Capabilities](#configuring-protected-capabilities)
+    * [A note on `unfiltered_html`](#a-note-on-unfilteredhtml)
   * [Protected Pages](#protected-pages)
     * [Configuring Protected Pages](#configuring-protected-pages)
       * [Wildcards](#wildcards)
@@ -143,7 +144,6 @@ Hence, **everyday users or content editors will largely remain unaffected by the
 | `list_users`              | Permits viewing user lists. Restricted to protect user privacy.                                        |
 | `create_users`            | Allows user creation. Restricted to prevent unauthorized user additions.                               |
 | `switch_themes`           | Grants theme switching. Restricted to maintain site's appearance and user experience.                  |
-| `unfiltered_html`         | Allows posting HTML without filtering. Restricted to prevent XSS attacks.                              |
 | `unfiltered_upload`       | Permits uploads without filtering. Restricted to avoid uploads of JS and HTML files.                   |
 | `update_core`             | Grants WordPress core update. Restricted to ensure stable updates and site integrity.                  |
 | `update_plugins`          | Allows plugin updates. Restricted to avoid compatibility or security issues.                           |
@@ -176,6 +176,23 @@ On a **WordPress Multisite**, additional capabilities are protected:
 | `upgrade_network`        | Allows network-wide upgrades. Restricted to ensure stable upgrades and maintain site integrity across the network. |
 | `setup_network`          | Provides access to set up the network initially. Restricted to maintain a consistent initial network setup.        |
 
+### A note on unfiltered_html
+
+This `unfiltered_html` capability is not protected by default, although, in our opinion, it should be as
+posting HTML without filtering could allow XSS attacks.
+
+However, too many page builders and sadly, even Gutenberg don't support two users editing a
+page where one user has `unfiltered_html` and the other doesn't - even without Fortress.
+
+We highly recommend disabling this capability for all users, always, by defining:
+
+```php
+define('DISALLOW_UNFILTERED_HTML', true);
+```
+
+in your wp-config.php file
+
+
 ### Configuring Protected Capabilities
 
 You have two methods at your disposal to alter the list of protected capabilities:
@@ -206,7 +223,7 @@ add_action(DeterminingProtectedCapabilities::class, function (DeterminingProtect
     $event->removeProtectedCapability('my_custom_capability');
     // Remove multiple capabilities.
     $event->removeProtectedCapability('my_custom_capability_1', 'my_custom_capability_2');
-}
+});
 ```
 
 **Key Point:** Ensure your hook callback is initialized before the `plugins_loaded` hook gets triggered.
@@ -286,7 +303,7 @@ add_action(ConfirmingSudoMode::class, function (ConfirmingSudoMode $event) :void
     
     // "*" Can be used as a wildcard.
     $event->addProtectedPath('/parent-page/*');
-})
+});
 ```
 
 #### Wildcards
