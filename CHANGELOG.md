@@ -1,3 +1,10 @@
+# [1.0.0-beta.32](https://github.com/snicco/enterprise/compare/1.0.0-beta.31...1.0.0-beta.32) (2023-11-05)
+
+
+### Features
+
+* add composer support for production installs ([d4d42c1](https://github.com/snicco/enterprise/commit/d4d42c1f739bb755cbdcdaafd2969faad3a7cd5a))
+
 # [1.0.0-beta.31](https://github.com/snicco/enterprise/compare/1.0.0-beta.30...1.0.0-beta.31) (2023-10-06)
 
 

@@ -273,32 +273,29 @@ $hash = $wp_hasher->HashPassword($secret);
 wp_check_password('super-secret', $hash);
 ```
 
-**WordPress Core has one confirmed bug** as pertains to the above code.
+WordPress Core does not contain this error after WP 6.2.
 
-[Recovery mode](https://make.wordpress.org/core/2019/04/16/fatal-error-recovery-mode-in-5-2/) tokens are created
-with `PasswordHash` and validated
-with `wp_check_password`.
+Prior to WP 6.2 Core had a bug with recovery mode tokens that we found and fixed.
+See the [ticket on trac](https://core.trac.wordpress.org/ticket/56787#ticket).
 
-We opened a [ticket on trac](https://core.trac.wordpress.org/ticket/56787#ticket) to fix this issue in WordPress 6.2.
-
-If you happen to run into this issue before it's fixed in WordPress 6.2 AND you
-[disabled legacy hashes](../../configuration/02_configuration_reference.md#allow_legacy_hashes), you can use the
-following code snippet to fix this temporarily:
+You can use the below snippet to allow legacy hashes at runtime which can be useful to "hotfix" a bug
+in plugin code.
 
 ```php
 use Snicco\Enterprise\Fortress\Password\Infrastructure\Event\CheckingGenericHash;
 
 add_action(CheckingGenericHash::class, function (CheckingGenericHash $event) :void {
     
-    if(wp_is_recovery_mode()){
+    // Overwrite this variable with your own logic.
+    $allow_generic_legacy_hash = false;
+    
+    if($allow_generic_legacy_hash){
         $event->allow_legacy_hash = true;
     }    
 
 });
 ```
 
-You can use similar conditionals to "hotfix" potential issues with plugins where the plugin's vendor is too slow to
-fix his code.
 
 #### Doing it wrong 03
 

@@ -25,6 +25,7 @@ The supported options are: (from most ideal to least ideal in the context of Wor
 2. Storing a local path in the `$_SERVER` env and have the plugin read the file contents.
    <br>This works great with docker-based setups and docker secrets.
 3. Using a PHP constant defined before Fortress loads (typically in the wp-config.php) file.
+   <br>This is **not recommended for production** environments since your secret are still stored in plaintext.
 
 ### Default: auto-generated secrets
 
@@ -40,7 +41,9 @@ This text is [usually included in the default configuration of WordPress](https:
 Fortress will recursively try to find the wp-config file, starting at `ABSPATH . 'wp.config.php'`.
 
 Storing the secrets in the wp-config.php file is superior to keeping them in the database.
-However, there is still the risk of the secrets ending up in backups or being leaked through a local file inclusion vulnerability.
+However,
+there is still the risk of the secrets ending up in backups or being leaked through a local file inclusion vulnerability
+which is why it's not recommended for production environments.
 
 ### Generating secrets before activation
 
