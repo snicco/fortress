@@ -339,7 +339,7 @@ logging in.
 The `sudo_mode_timeout_per_cap` option can be used if more fine-grained control of the sudo mode timeout is needed.
 
 The following configuration sets the sudo mode timeout to 10 (`60*6=600`) minutes for users with the `mange_options`
-capability, and to six hours (`60*60*6 = 18,000`) for everybody else.
+capability, and to five hours (`60*60*5 = 18,000`) for everybody else.
 
 ```json
 {
