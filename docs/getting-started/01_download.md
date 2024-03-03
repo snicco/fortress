@@ -1,14 +1,14 @@
 # Downloading Fortress
 
 <!-- TOC -->
-* [Downloading Fortress](#downloading-fortress)
-  * [Web UI](#web-ui)
-  * [REST API](#rest-api)
-    * [List all releases (including beta releases):](#list-all-releases-including-beta-releases--)
-    * [Get the latest version name (including beta releases)](#get-the-latest-version-name-including-beta-releases-)
+  * [GitHub Web UI](#github-web-ui)
+  * [GitHub REST API](#github-rest-api)
+    * [List all releases (including beta releases):](#list-all-releases-including-beta-releases)
+    * [Get the latest version name (including beta releases)](#get-the-latest-version-name-including-beta-releases)
     * [Get the download URL of Fortress's latest version](#get-the-download-url-of-fortresss-latest-version)
     * [Download a release](#download-a-release)
     * [Using fetch](#using-fetch)
+  * [Composer](#composer)
 <!-- TOC -->
 
 ---
@@ -17,12 +17,14 @@ New versions of Fortress are auto-deployed (as release assets) on each commit to
 
 Fortress strictly follows [semantic versioning (SemVer)](https://semver.org/).
 
-After your GitHub account has been granted access to the development repository
+After your GitHub account has been granted access to the distribution repository
 you can download releases using the GitHub Web UI or the GitHub REST API.
 
 > A dedicated license and update server will be available in future versions.
 
-## Web UI
+> 🚨🚨🚨 The links below will not work for you unless you have been granted access to the distribution repository.
+
+## GitHub Web UI
 
 1. Go to the [release archive](https://github.com/snicco/fortress-dist/releases).
 2. Click on the version that you want to download.
@@ -31,7 +33,7 @@ you can download releases using the GitHub Web UI or the GitHub REST API.
 
 ![Web UI download](../_assets/images/download-release.png)
 
-## REST API
+## GitHub REST API
 
 Make sure that you are authenticating as the GitHub user that has access to the development repository of Fortress.  
 You can either use the [GitHub CLI](https://docs.github.com/en/rest/guides/getting-started-with-the-rest-api?apiVersion=2022-11-28#authentication-example) or a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-personal-access-token-classic) + [header authentication](https://docs.github.com/en/rest/guides/getting-started-with-the-rest-api?apiVersion=2022-11-28#using-headers).
@@ -87,8 +89,6 @@ curl \
   -H "Authorization: Bearer <YOUR-PERSONAL_ACCESS_TOKEN>"\
   -H "X-GitHub-Api-Version: 2022-11-28" \
   https://api.github.com/repos/snicco/fortress-dist/releases | jq .[0].assets[0].url
-
-# ==> "https://api.github.com/repos/snicco/enterprise/releases/assets/92177402"
 ```
 
 ### Download a release
@@ -117,6 +117,31 @@ fetch \
   --tag="1.0.0-beta.1" \
   --release-asset="snicco-fortress-.*"
 ```
+
+---
+
+## Composer
+
+Ensure that composer is [configured to use a GitHub PAT](https://getcomposer.org/doc/articles/authentication-for-private-packages.md#github-oauth) that has been
+granted access to the distribution repository.
+
+After that, you can install Fortress via composer by adding it to your `composer.json` file.
+
+```json
+{
+  "require": {
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "https://github.com/snicco/fortress-dist"
+      }
+    ],
+    "snicco/fortress": "^1.0.0-beta"
+  }
+}
+```
+
+Fortress will be installed into your must-use directory using the [composer installers](https://github.com/composer/installers) package.
 
 ---
 

@@ -13,7 +13,9 @@
           "password",
           "session",
           "auth",
-          "rate_limit"
+          "rate_limit",
+          "vaults_and_pillars",
+          "code_freeze"
         ]
       },
       "uniqueItems": true,
@@ -23,7 +25,8 @@
         "session",
         "auth",
         "rate_limit",
-        "vaults_and_pillars"
+        "vaults_and_pillars",
+        "code_freeze"
       ],
       "description": "Determines the actively used modules of Fortress."
     },
@@ -490,6 +493,18 @@
               ]
             }
           }
+        }
+      }
+    },
+    "code_freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "string",
+          "description": "Controls whether the code freeze module is enabled.",
+          "default": "auto",
+          "enum": ["auto", "yes", "no"]
         }
       }
     }

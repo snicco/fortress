@@ -1,6 +1,7 @@
 # Complete configuration reference
 
 <!-- TOC -->
+
 * [Overview](#overview)
 * [Root-level](#root-level)
     * [modules](#modules)
@@ -60,14 +61,17 @@
     * [syslog_flags](#syslog_flags)
     * [syslog_facility](#syslog_facility)
 * [Vaults & Pillars module](#vaults--pillars-module)
-  * [strict_option_vaults_and_pillars](#strictoptionvaultsandpillars)
-  * [option_pillars](#optionpillars)
-  * [option_vaults](#optionvaults)
+    * [strict_option_vaults_and_pillars](#strictoptionvaultsandpillars)
+    * [option_pillars](#optionpillars)
+    * [option_vaults](#optionvaults)
+* [Code Freeze module](#code-freeze-module)
+    * [enabled](#enabled)
 <!-- TOC -->
 
 ## Overview
 
-You can find a JSON schema of Fortress's configuration [here](schema.json). You can use the JSON schema in your favorite IDE to provide syntax highlighting, auto-completion and validation.
+You can find a JSON schema of Fortress's configuration [here](schema.json). You can use the JSON schema in your favorite
+IDE to provide syntax highlighting, auto-completion and validation.
 This is highly recommended when editing Fortress configuration locally:
 
 - [PHPStorm: How to add custom schema sources.](https://www.jetbrains.com/help/phpstorm/json.html#ws_json_schema_add_custom)
@@ -77,9 +81,10 @@ Below is the JSON representation of the baseline configuration of Fortress witho
 any of the supported [configuration sources](01_how_to_configure_fortress.md#configuration-sources).
 
 > In reality, Fortress does not store its cached configuration as JSON but as a PHP array, as
-explained [here](01_how_to_configure_fortress.md#how-configuration-is-stored-and-loaded).
-> Many of the values are created dynamically in the [fortress.php](../../config/fortress.php) config file during the first
-cache built.
+> explained [here](01_how_to_configure_fortress.md#how-configuration-is-stored-and-loaded).
+> Many of the values are created dynamically in the [fortress.php](../../config/fortress.php) config file during the
+> first
+> cache built.
 
 Note: The below configuration is for a single site installation of WordPress.
 The configuration for a multisite is slightly different.
@@ -91,7 +96,8 @@ The configuration for a multisite is slightly different.
     "session",
     "auth",
     "rate_limit",
-    "vaults_and_pillars"
+    "vaults_and_pillars",
+    "code_freeze"
   ],
   "url_namespace": "/snicco-fortress",
   "cli_namespace": "snicco/fortress",
@@ -226,6 +232,9 @@ The configuration for a multisite is slightly different.
     "option_pillars": [],
     "option_vaults": [],
     "strict_option_vaults_and_pillars": false
+  },
+  "code_freeze": {
+    "enabled": "auto"
   }
 }
 ```
@@ -236,8 +245,8 @@ The configuration for a multisite is slightly different.
 
 - Key: `modules`
 - Type: `string[]`
-- Default: `["password","session","auth","rate_limit"]`
-- Allowed values: `["password","session","auth","rate_limit"]`
+- Default: `["password","session","auth","rate_limit", "vaults_and_pillars", "code_freeze"`
+- Allowed values: `["password","session","auth","rate_limit", "vaults_and_pillars", "code_freeze"`
 
 The `modules` option determines the actively used modules of Fortress.
 
@@ -300,11 +309,11 @@ Example configuration for WooCommerce sites:
 
 ```json
 {
-    "privileged_user_roles": [
-        "administrator",
-        "editor",
-        "shop_manager"
-    ]
+  "privileged_user_roles": [
+    "administrator",
+    "editor",
+    "shop_manager"
+  ]
 }
 ```
 
@@ -327,7 +336,8 @@ to [customize the frontend appearance](../getting-started/03_white_label.md#appe
 - Type: `positive-integer`
 - Default: `600` (10 minutes)
 
-The `sudo_mode_timeout` option is the interval in seconds during which Fortress will consider a session to be in [sudo mode](../modules/session/sudo-mode.md) after
+The `sudo_mode_timeout` option is the interval in seconds during which Fortress will consider a session to be
+in [sudo mode](../modules/session/sudo-mode.md) after
 logging in.
 
 ### sudo_mode_timeout_per_cap
@@ -343,12 +353,12 @@ capability, and to six hours (`60*60*6 = 18,000`) for everybody else.
 
 ```json
 {
-    "session": {
-        "sudo_mode_timeout": 18000,
-        "sudo_mode_timeout_per_cap": {
-            "manage_options": 600
-        }
+  "session": {
+    "sudo_mode_timeout": 18000,
+    "sudo_mode_timeout_per_cap": {
+      "manage_options": 600
     }
+  }
 }
 ```
 
@@ -360,26 +370,26 @@ capability, and to six hours (`60*60*6 = 18,000`) for everybody else.
 
 The `idle_timeout` option is the interval in seconds after which a user without activity is logged out.
 
-
 ### idle_timeout_per_cap
 
 - Key: `idle_timeout_per_cap`
 - Type: `array<string,positive-interger`
 - Default: `[]`
 
-The `idle_timeout_per_cap` option can be used if more fine-grained control of the [idle timeout](../modules/session/session-managment-and-security.md#the-idle-timeout) is needed.
+The `idle_timeout_per_cap` option can be used if more fine-grained control of
+the [idle timeout](../modules/session/session-managment-and-security.md#the-idle-timeout) is needed.
 
 The following configuration sets the idle timeout to 10 (`60*6=600`) minutes for users with the `mange_options`
 capability, and to six hours (`60*60*6 = 18,000`) for everybody else.
 
 ```json
 {
-    "session": {
-        "idle_timeout": 18000,
-        "idle_timeout_per_cap": {
-            "manage_options": 600
-        }
+  "session": {
+    "idle_timeout": 18000,
+    "idle_timeout_per_cap": {
+      "manage_options": 600
     }
+  }
 }
 ```
 
@@ -389,7 +399,8 @@ capability, and to six hours (`60*60*6 = 18,000`) for everybody else.
 - Type: `positive-interger`
 - Default: `1200` (20 minutes)
 
-The `rotation_timeout` is the interval after which the user's session token is [rotated](../modules/session/session-managment-and-security.md#the-rotation-timeout).
+The `rotation_timeout` is the interval after which the user's session token
+is [rotated](../modules/session/session-managment-and-security.md#the-rotation-timeout).
 
 ### rotation_timeout_per_cap
 
@@ -404,12 +415,12 @@ capability, and to six hours (`60*60*6 = 18,000`) for everybody else.
 
 ```json
 {
-    "session": {
-        "rotation_timeout": 18000,
-        "rotation_timeout_per_cap": {
-            "manage_options": 600
-        }
+  "session": {
+    "rotation_timeout": 18000,
+    "rotation_timeout_per_cap": {
+      "manage_options": 600
     }
+  }
 }
 ```
 
@@ -436,12 +447,12 @@ the `mange_options` capability, and to 48 hours (`60*60*48 = 172,800`) for every
 
 ```json
 {
-    "session": {
-        "absolute_timeout": 172800,
-        "absolute_timeout_per_cap": {
-            "manage_options": 18000
-        }
+  "session": {
+    "absolute_timeout": 172800,
+    "absolute_timeout_per_cap": {
+      "manage_options": 18000
     }
+  }
 }
 ```
 
@@ -462,7 +473,8 @@ remember_me" option during login.
 - Type: `array<string,positive-interger`
 - Default: `[]`
 
-See: [`absolute_timeout_per_cap`](#absolutetimeoutpercap), with the difference being that this option applies when a user checks the "
+See: [`absolute_timeout_per_cap`](#absolutetimeoutpercap), with the difference being that this option applies when a
+user checks the "
 remember_me" option during login.
 
 ### table_name
@@ -519,15 +531,16 @@ The `protected_pages` option specifies URL paths that a user can only access if 
 
 You can use a `*` character as a wildcard.
 
-The following configuration would prevent users whose sessions are not in sudo mode anymore from accessing the entire wp-admin area.
+The following configuration would prevent users whose sessions are not in sudo mode anymore from accessing the entire
+wp-admin area.
 
 ```json
 {
-    "session": {
-        "protected_pages": [
-            "/wp-admin/*"
-        ]
-    }
+  "session": {
+    "protected_pages": [
+      "/wp-admin/*"
+    ]
+  }
 }
 ```
 
@@ -583,27 +596,29 @@ The following configuration would prevent users whose sessions are not in sudo m
   }
     ```
 
-The `protected_capabilities` option specifies capabilities that a user can only "has" if their session is still in [sudo mode](../modules/session/sudo-mode.md).
+The `protected_capabilities` option specifies capabilities that a user can only "has" if their session is still
+in [sudo mode](../modules/session/sudo-mode.md).
 
 The following configuration would only protect the `manage_options` capability.
 
 ```json
 {
-    "session": {
-        "protected_capabilities": [
-            "manage_options"
-        ]
-    }
+  "session": {
+    "protected_capabilities": [
+      "manage_options"
+    ]
+  }
 }
 ```
 
-The following configuration would make all capabilities accessible all the time, even if a session is not in [sudo mode](../modules/session/sudo-mode.md).
+The following configuration would make all capabilities accessible all the time, even if a session is not
+in [sudo mode](../modules/session/sudo-mode.md).
 
 ```json
 {
-    "session": {
-        "protected_capabilities": []
-    }
+  "session": {
+    "protected_capabilities": []
+  }
 }
 ```
 
@@ -613,9 +628,10 @@ The following configuration would make all capabilities accessible all the time,
 - Type: `positive-integer`
 - Default: `10`
 
-The `non_sudo_mode_recheck_frequency` option determines how often Fortress checks if a user's session has re-entered the [sudo mode](../modules/session/sudo-mode.md).
+The `non_sudo_mode_recheck_frequency` option determines how often Fortress checks if a user's session has re-entered
+the [sudo mode](../modules/session/sudo-mode.md).
 
-This timeout is only relevant if the user is either about to cross the threshold of non being in sudo mode anymore, 
+This timeout is only relevant if the user is either about to cross the threshold of non being in sudo mode anymore,
 or has crossed the sudo timeout already.
 
 A value of `10` means that Fortress would check every ten **seconds** if the user has confirmed his credentials
@@ -638,12 +654,12 @@ ajax like requests.
 
 ```json
 {
-    "session": {
-        "disable_rotation_for_ajax_like_requests_per_cap": [
-            "subscriber",
-            "author"
-        ]
-    }
+  "session": {
+    "disable_rotation_for_ajax_like_requests_per_cap": [
+      "subscriber",
+      "author"
+    ]
+  }
 }
 ```
 
@@ -695,7 +711,8 @@ after logging in.
 - Type: `string[]`
 - Default: `[]`
 
-The `require_2fa_for_roles_before_login` option can be used to prevent users without confirmed 2FA credentials from logging in.
+The `require_2fa_for_roles_before_login` option can be used to prevent users without confirmed 2FA credentials from
+logging in.
 
 This option is handy in the following scenario:
 
@@ -706,11 +723,11 @@ The following configuration:
 
 ```json
 {
-    "auth": {
-        "require_2fa_for_roles_before_login": [
-            "administrator"
-        ]
-    }
+  "auth": {
+    "require_2fa_for_roles_before_login": [
+      "administrator"
+    ]
+  }
 }
 ```
 
@@ -719,7 +736,8 @@ has the following effects:
 - An administrator can only log in if they have confirmed 2FA credentials.
 - No administrator will be able to deactivate 2FA for his account.
 
-This significantly hardens the site against attacks that attempts to create an undetected admin account since the account will not be able to log in due to missing 2FA credentials.
+This significantly hardens the site against attacks that attempts to create an undetected admin account since the
+account will not be able to log in due to missing 2FA credentials.
 
 ### max_totp_attempts_before_lockout
 
@@ -746,7 +764,7 @@ on the default wp-login.php page.
 - Default: `true`
 
 Controls whether Fortress allows anybody to request a magic login link
-via the UI/HTTP. 
+via the UI/HTTP.
 
 Setting this option to `false` makes Fortress behave as is the functionality to request
 Magic Links doesn't exist.
@@ -769,7 +787,9 @@ An array of user roles that are excluded from complying with the password policy
 - Type: `bool`
 - Default: `true`
 
-The `disable_application_passwords` option controls whether [WordPress application passwords](https://make.wordpress.org/core/2020/11/05/application-passwords-integration-guide/) are entirely disabled.
+The `disable_application_passwords` option controls
+whether [WordPress application passwords](https://make.wordpress.org/core/2020/11/05/application-passwords-integration-guide/)
+are entirely disabled.
 
 ### allow_legacy_hashes
 
@@ -777,12 +797,14 @@ The `disable_application_passwords` option controls whether [WordPress applicati
 - Type: `bool`
 - Default: `true`
 
-The `allow_legacy_hashes` option controls whether Fortress will try to validate password hashes created using the insecure default hashing algorithm of WordPress.
+The `allow_legacy_hashes` option controls whether Fortress will try to validate password hashes created using the
+insecure default hashing algorithm of WordPress.
 
 Settings this option to `false` is highly recommended if one of the following conditions are met:
 
 1. The WordPress site is brand new, with Fortress pre-installed.
-2. All legacy password hashes have been upgraded by Fortress using the [WP-CLI command](../wp-cli/readme.md#upgrade-legacy-hashes).
+2. All legacy password hashes have been upgraded by Fortress using
+   the [WP-CLI command](../wp-cli/readme.md#upgrade-legacy-hashes).
 
 ### default_hash_strength
 
@@ -791,7 +813,8 @@ Settings this option to `false` is highly recommended if one of the following co
 - Default: `moderate`
 - Allowed Values: `"interactive" | "moderate" | "sensitive"`
 
-The `default_hash_strength` option determines how long it takes the libsodium PHP extension to compute the hash of a password.
+The `default_hash_strength` option determines how long it takes the libsodium PHP extension to compute the hash of a
+password.
 
 > For online use (e.g., logging in on a website), a one-second computation is likely the acceptable maximum.
 
@@ -809,9 +832,11 @@ See: https://www.php.net/manual/de/function.sodium-crypto-pwhash-str.php
 - Type: `bool`
 - Default: `true`
 
-The `auto_upgrade_hashes` option controls whether Fortress will automatically rehash a user's password after he entered authenticated successfully.
+The `auto_upgrade_hashes` option controls whether Fortress will automatically rehash a user's password after he entered
+authenticated successfully.
 
-The only scenario in which you would want to disable this option is if you don't want Fortress to modify any data since you plan on removing it.
+The only scenario in which you would want to disable this option is if you don't want Fortress to modify any data since
+you plan on removing it.
 
 ### include_pluggable_functions
 
@@ -838,11 +863,11 @@ The following configuration:
 
 ```json
 {
-    "password": {
-        "disable_web_password_reset_for_roles": [
-            "administrator"
-        ]
-    }
+  "password": {
+    "disable_web_password_reset_for_roles": [
+      "administrator"
+    ]
+  }
 }
 ```
 
@@ -874,7 +899,8 @@ a rate-limit storage.
 - Type: `non-empty-string`
 - Default: `snicco_fortress_rate_limits`
 
-The `cache_group` option will either be used as a WP Object cache group for storing rate limits or, if no object cache is available, as the database table name for storing rate limits.
+The `cache_group` option will either be used as a WP Object cache group for storing rate limits or, if no object cache
+is available, as the database table name for storing rate limits.
 
 ### device_id_cookie_prefix
 
@@ -914,7 +940,8 @@ The number of failed login attempts a user can make without device ID before the
 - Type: `positive-integer`
 - Default: `900` (15 minutes)
 
-The interval in seconds that a user rate-limited by his username has to wait before he can make **ONE** more login request for that same username.
+The interval in seconds that a user rate-limited by his username has to wait before he can make **ONE** more login
+request for that same username.
 
 ### ip_burst
 
@@ -938,7 +965,8 @@ The interval in seconds that a rate-limited IP address has to wait before it can
 - Type: `positive-integer`
 - Default: `100`
 
-The number of failed logins that are considered "normal" across the entire site. Exceeding this limit will activate the global login throttling.
+The number of failed logins that are considered "normal" across the entire site. Exceeding this limit will activate the
+global login throttling.
 
 ### global_refill_one_token_seconds
 
@@ -994,7 +1022,9 @@ Next: [The Fortress password module](../modules/password/readme.md).
 - Type: `boolean`
 - Default: `false`
 
-The `strict_option_vaults_and_pillars` option can be used to enable the [`Vaults & Pillars` `Strict Mode`](../modules/vaults_and_pillars/wordpress_options.md#strict-mode-in-vaults-and-pillars) for WordPress options.
+The `strict_option_vaults_and_pillars` option can be used to enable
+the [`Vaults & Pillars` `Strict Mode`](../modules/vaults_and_pillars/wordpress_options.md#strict-mode-in-vaults-and-pillars)
+for WordPress options.
 
 ### option_pillars
 
@@ -1002,7 +1032,8 @@ The `strict_option_vaults_and_pillars` option can be used to enable the [`Vaults
 - Type: `object`
 - Default: `{}`
 
-The `option_pillars` option defines all [Pillars](../modules/vaults_and_pillars/wordpress_options.md#pillars) for WordPress Options.
+The `option_pillars` option defines all [Pillars](../modules/vaults_and_pillars/wordpress_options.md#pillars) for
+WordPress Options.
 
 The exact required structure is documented [here](../modules/vaults_and_pillars/wordpress_options.md#setting-up-pillars)
 and in the [Fortress schema.json](schema.json):
@@ -1062,7 +1093,8 @@ and in the [Fortress schema.json](schema.json):
 - Type: `object`
 - Default: `{}`
 
-The `option_vaults` option defines all [Vaults](../modules/vaults_and_pillars/wordpress_options.md#vaults) for WordPress Options.
+The `option_vaults` option defines all [Vaults](../modules/vaults_and_pillars/wordpress_options.md#vaults) for WordPress
+Options.
 
 The exact required structure is documented [here](../modules/vaults_and_pillars/wordpress_options.md#setting-up-vaults)
 and in the [Fortress schema.json](schema.json):
@@ -1087,3 +1119,25 @@ and in the [Fortress schema.json](schema.json):
   }
 }
 ```
+
+## Code Freeze module
+
+- JSON namespace: `"code_freeze"`
+
+### enabled
+
+- Key: `enabled`
+- Type: `"auto"|"yes"|"no"`
+- Default: `"auto"`
+
+The `code_freeze.enabled` option controls whether the [Code Freeze](../modules/code_freeze/readme.md) module activated.
+
+- `"auto"` means that the module is only active when the WP_ENVIRONMENT_TYPE constant is set to `production`.
+  If the constant is not set, WordPress defaults to `production`.
+  Read more
+  here: [wp_get_environment_type](https://developer.wordpress.org/reference/functions/wp_get_environment_type/) and
+  here [WordPress environment types](https://make.wordpress.org/core/2020/08/27/wordpress-environment-types/).
+
+- `"yes"` means that the module is always active.
+
+- `"no"` means that the module is never active.

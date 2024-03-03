@@ -1,3 +1,15 @@
+# [1.0.0-beta.33](https://github.com/snicco/enterprise/compare/1.0.0-beta.32...1.0.0-beta.33) (2024-03-03)
+
+
+### Bug Fixes
+
+* use relative links for wp error object in two-factor challenge redirect ([be5440e](https://github.com/snicco/enterprise/commit/be5440e9eb50cdcec24062192cb82f1c86c0fb7b)), closes [#133](https://github.com/snicco/enterprise/issues/133)
+
+
+### Features
+
+* code freeze initial release ([d391846](https://github.com/snicco/enterprise/commit/d39184689b15eea45de2ecabd09a5d68b3d9c4e8))
+
 # [1.0.0-beta.32](https://github.com/snicco/enterprise/compare/1.0.0-beta.31...1.0.0-beta.32) (2023-11-05)
 
 

@@ -52,7 +52,7 @@ If you want to integrate Fortress into your hosting platform or similar, go thro
 
 ## Modules
 
-Snicco Fortress consists of five independent modules that you can use independently of each other.
+Snicco Fortress consists of six independent modules that you can use independently of each other.
 All five modules are activated by default.
 
 1. [Password Security](modules/password/readme.md)
@@ -60,6 +60,7 @@ All five modules are activated by default.
 3. [Authentication](modules/auth/readme.md)
 4. [Session Management](modules/session/readme.md)
 5. [Vaults & Pillars](modules/vaults_and_pillars/readme.md)
+6. [Code Freeze](modules/code_freeze/readme.md)
 
 ## WP-CLI
 
