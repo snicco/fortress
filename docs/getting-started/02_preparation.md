@@ -194,6 +194,9 @@ if ($request_uri ~* "(/snicco-fortress.*)") {
 
 Of course, you need to substitute `/snicco-fortress` if you [white-labeled the url namespace](03_white_label.md#sniccofortresswhitelabelslug).
 
+Fortress will also send a `Cache-Control: no-store, private` header with every response for a **Fortress-managed** page
+which you can use to configure your web server to not cache these pages.
+
 ---
 
 Next: [White-Label](03_white_label.md)

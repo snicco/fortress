@@ -10,6 +10,7 @@
         * [Output Verbosity](#output-verbosity)
         * [Color support](#color-support)
         * [Interactivity](#interactivity)
+        * [Confirm all](#confirm-all)
 * [Command reference](#command-reference)
     * [Shared](#shared)
         * [info](#info)
@@ -174,6 +175,19 @@ This won't work for commands that run in an automated fashion. In this scenario,
     ```
 - Use the `--no-interaction` flag, in which case Fortress will assume that the default answer was chosen.
 
+#### Confirm All
+
+Some destructive commands ask for a "yes/no" confirmation to proceed with the command. 
+
+The default answer is "`no`", and the user has to confirm the command by typing "`yes`".
+
+You can bypass all confirmation prompts by using the `--confirm-all` flag.
+
+The difference between `--no-interaction` and `--confirm-all` is that the former will assume the default answer for
+all questions while the latter will answer "`yes`" to all "yes/no" confirmation prompts.
+
+`--confirm-all` takes precedence over `--no-interaction`.
+
 ## Command reference
 
 ### Shared
@@ -220,10 +234,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+    [--confirm-all]  [--confirm-all][--confirm-all]
+        Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### cache:config
@@ -275,10 +292,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+      Answer yes to all confirmation prompts. Use with cautio    Answer yes to all confirmation prompts. Use with cautio[--confirm-all]
+        Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### cache:clear
@@ -314,10 +334,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### config:sources
@@ -365,10 +388,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### config:test
@@ -408,10 +434,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### trigger-activation
@@ -443,10 +472,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 ### Password
@@ -507,10 +539,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### force-reset-all
@@ -582,10 +617,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### password reset
@@ -623,10 +661,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 ### Session
@@ -665,10 +706,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### destroy-all
@@ -702,10 +746,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### toggle-sudo
@@ -743,10 +790,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 ### Auth
@@ -800,10 +850,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### totp:complete
@@ -843,10 +896,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### totp:deactivate
@@ -886,10 +942,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### totp:reset-recovery-codes
@@ -927,10 +986,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### totp:reset-failed-attempts
@@ -966,10 +1028,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 #### magic-link:create
@@ -1018,10 +1083,13 @@ OPTIONS
     Maximum verbosity (equal to --debug)
 
   [--interaction]
-    (--no-interaction) Do not ask any interactive question.
+    (--no-interaction) Do not ask any interactive question and always use the default answer instead.
 
   [--ansi]
     Force (or disable --no-ansi) ANSI output.
+    
+  [--confirm-all]
+    Answer yes to all confirmation prompts. Use with caution.  
 ```
 
 ---

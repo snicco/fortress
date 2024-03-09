@@ -1,3 +1,19 @@
+# [1.0.0-beta.34](https://github.com/snicco/enterprise/compare/1.0.0-beta.33...1.0.0-beta.34) (2024-03-09)
+
+
+### Bug Fixes
+
+* allow changelog preview with code freeze enabled ([fd13140](https://github.com/snicco/enterprise/commit/fd13140d1a2bd65dfce08eb81bfc61eaf765e28a))
+* use correct translation text-domain ([f191967](https://github.com/snicco/enterprise/commit/f1919675f30a65dee89933d75e9f1b525c5a2707)), closes [#105](https://github.com/snicco/enterprise/issues/105)
+
+
+### Features
+
+* add --confirm-all cli flag to always proceed with commands ([9b90df9](https://github.com/snicco/enterprise/commit/9b90df9002d72d0e74d640819455f9383bde5249)), closes [#127](https://github.com/snicco/enterprise/issues/127)
+* add no-store cache-control headers to all fortress pages ([abafc0a](https://github.com/snicco/enterprise/commit/abafc0a1f855dfbdd61ca9ecc9cf6022a3ce21dc)), closes [#103](https://github.com/snicco/enterprise/issues/103)
+* automatically add noindex robots headers to all fortress routes ([b13a002](https://github.com/snicco/enterprise/commit/b13a00243b982636fd21ac2cf9654316ddd04069)), closes [#104](https://github.com/snicco/enterprise/issues/104)
+* automatically turn totp redirects into wp_errors for ajax-like requests ([646d372](https://github.com/snicco/enterprise/commit/646d372c7d2bde7870f57b9450b7970d2d0ee0d4))
+
 # [1.0.0-beta.33](https://github.com/snicco/enterprise/compare/1.0.0-beta.32...1.0.0-beta.33) (2024-03-03)
 
 
