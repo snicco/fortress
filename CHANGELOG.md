@@ -1,3 +1,10 @@
+# [1.0.0-beta.35](https://github.com/snicco/enterprise/compare/1.0.0-beta.34...1.0.0-beta.35) (2024-03-15)
+
+
+### Features
+
+* vnp better handling of non-ascii options ([622f393](https://github.com/snicco/enterprise/commit/622f393ae72bdc8e81897d94eaa077131a3e9942)), closes [#139](https://github.com/snicco/enterprise/issues/139) [#139](https://github.com/snicco/enterprise/issues/139)
+
 # [1.0.0-beta.34](https://github.com/snicco/enterprise/compare/1.0.0-beta.33...1.0.0-beta.34) (2024-03-09)
 
 

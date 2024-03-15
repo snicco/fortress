@@ -106,7 +106,7 @@ The configuration for a multisite is slightly different.
     "administrator",
     "editor"
   ],
-  "theme_css_file": "/wp-content/plugins/snicco-fortress/default-theme.css",
+  "theme_css_file": "/wp-content/mu-plugins/snicco-fortress/default-theme.css",
   "session": {
     "sudo_mode_timeout": 600,
     "sudo_mode_timeout_per_cap": [],
@@ -321,7 +321,7 @@ Example configuration for WooCommerce sites:
 
 - Key: `theme_css_file`
 - Type: `non-empty-string`
-- Default: `/wp-content/plugins/snicco-fortress/default-theme.css`
+- Default: `/wp-content/mu-plugins/snicco-fortress/default-theme.css`
 
 A path to an existing CSS file that defines CSS variables
 to [customize the frontend appearance](../getting-started/03_white_label.md#appearance) of Fortress.
