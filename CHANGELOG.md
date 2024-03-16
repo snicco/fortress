@@ -1,3 +1,10 @@
+# [1.0.0-beta.36](https://github.com/snicco/enterprise/compare/1.0.0-beta.35...1.0.0-beta.36) (2024-03-16)
+
+
+### Features
+
+* lock hashed totp recovery codes by user id ([302c0b3](https://github.com/snicco/enterprise/commit/302c0b32ee7dc1dbc353099ddfbcf38a82ea64f3)), closes [#116](https://github.com/snicco/enterprise/issues/116)
+
 # [1.0.0-beta.35](https://github.com/snicco/enterprise/compare/1.0.0-beta.34...1.0.0-beta.35) (2024-03-15)
 
 

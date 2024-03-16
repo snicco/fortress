@@ -30,6 +30,7 @@
 * [Auth module](#auth-module)
     * [totp_secrets_table_name](#totp_secrets_table_name)
     * [totp_sha_algo](#totp_sha_algo)
+    * [totp_recovery_codes_locked_to_user_id](#totp_recovery_codes_locked_to_user_id)
     * [skip_2fa_setup_duration_seconds](#skip_2fa_setup_duration_seconds)
     * [require_2fa_for_roles](#require_2fa_for_roles)
     * [require_2fa_for_roles_before_login](#require_2fa_for_roles_before_login)
@@ -188,6 +189,7 @@ The configuration for a multisite is slightly different.
   "auth": {
     "totp_secrets_table_name": "snicco_fortress_totp_secrets",
     "totp_sha_algo": "sha1",
+    "totp_recovery_codes_locked_to_user_id": false,
     "skip_2fa_setup_duration_seconds": 1800,
     "require_2fa_for_roles_before_login": [],
     "max_totp_attempts_before_lockout": 5,
@@ -687,6 +689,22 @@ The `totp_sha_algo` option sets the hash algorithm that Fortress uses to generat
 Only change this if you are 100% sure what you are doing.
 
 Most password manager apps (1Password, Google Authenticator, etc.) only support `sha1`.
+
+### totp_recovery_codes_locked_to_user_id
+
+- Key: `totp_recovery_codes_locked_to_user_id`
+- Type: `boolean`
+- Default: `false`
+
+The `totp_recovery_codes_locked_to_user_id` option controls 
+whether a user's 2FA recovery keys are hashed with their user ID as additional data.
+
+This prevents an attacker with write-access to the database from swapping his hashed recovery
+codes with the hashed recovery codes of another user (that presumably has an attacker-compromised password).
+
+**This option should always be enabled for new sites**, but is currently turned
+off by default because it will invalidate existing recovery codes that were
+created prior to the introduction of this option.
 
 ### skip_2fa_setup_duration_seconds
 

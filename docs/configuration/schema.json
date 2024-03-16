@@ -231,6 +231,11 @@
           ],
           "default": "sha1"
         },
+        "totp_recovery_codes_locked_to_user_id": {
+          "type": "boolean",
+          "description": "Controls whether a user's 2FA recovery keys are hashed with their user ID as additional data.",
+          "default": false
+        },
         "skip_2fa_setup_duration_seconds": {
           "type": "integer",
           "description": "The interval in seconds a user can skip his mandatory 2FA setup once.",
