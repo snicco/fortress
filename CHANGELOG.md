@@ -1,3 +1,10 @@
+# [1.0.0-beta.47](https://github.com/snicco/enterprise/compare/1.0.0-beta.46...1.0.0-beta.47) (2025-03-31)
+
+
+### Features
+
+* wp6.8 password hashing compatability ([13c3092](https://github.com/snicco/enterprise/commit/13c309286f3e96d26b99752f355a0e2e8bfd38c3))
+
 # [1.0.0-beta.46](https://github.com/snicco/enterprise/compare/1.0.0-beta.45...1.0.0-beta.46) (2024-09-07)
 
 
